@@ -82,13 +82,15 @@ public class Part : MonoBehaviour
         game_object.AddComponent<T>();
     }
 
-    public void AddAttachmentPoint(AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position)
+    public void AddAttachmentPoint(AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation)
     {
         GameObject point_grid = new GameObject("PointGrid");
         point_grid.transform.parent = game_object.transform;
+
         PartPointGrid part_point_grid = point_grid.AddComponent<PartPointGrid>();
         part_point_grid.gridUnitSize = new Vector3Int(1, 1, 1);
         part_point_grid.Position = position;
+        part_point_grid.Orientation = Quaternion.Euler(orientation);
         part_point_grid.isPivot = true;
         part_point_grid.alignmentFlags = alignment_flags;
         part_point_grid.attachmentTypes = attachment_flags;
