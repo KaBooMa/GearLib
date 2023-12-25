@@ -72,7 +72,7 @@ You'll need to install Unity version 2021.3.33f1 specifically to create your Ass
 ![Alt text](imgs/bundle-naming.png)
 - Now under "Window > Asset Bundle Browser", you can click the "Build" tab and "Build" button. It will store it in your Unity project folder under Assetbundles/Standalone by default. You only need the one named your bundle, such as the picture below.
 
-![Alt text](image.png)
+![Alt text](imgs/prefab-example.png)
 - Your new bundle is ready to be added to your plugin folder. You need to include this same asset along with your distribution for players, or embed it into your plugin DLL.
 
 ## Modding Guidance
