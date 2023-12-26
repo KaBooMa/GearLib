@@ -20,6 +20,9 @@
     <Reference Include="Il2Cppmscorlib">
       <HintPath>lib\Il2Cppmscorlib.dll</HintPath>
     </Reference>
+    <Reference Include="Il2CppSystem.Core">
+      <HintPath>lib\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SmashHammer.GearBlocks">
       <HintPath>lib\SmashHammer.GearBlocks.dll</HintPath>
     </Reference>

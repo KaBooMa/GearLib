@@ -7,18 +7,19 @@ using SmashHammer.Physics;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartPointGrid;
 
-namespace GearLib.Parts;
+namespace GearLib.Core;
 
 public class Part : MonoBehaviour
 {
     public GameObject game_object;
+    PartDescriptor descriptor;
 
     public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category)
     {
         game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
 
         // Create mandatory components for new asset
-        PartDescriptor descriptor = game_object.AddComponent<PartDescriptor>();
+        descriptor = game_object.AddComponent<PartDescriptor>();
         PartPropertiesBasic points = game_object.AddComponent<PartPropertiesBasic>();
         game_object.AddComponent<PartPoints>();
 
@@ -76,17 +77,31 @@ public class Part : MonoBehaviour
         Plugin.Log.LogInfo($"Queued {display_name} to be added.");
     }
 
-    public void AddBehaviour<T>() where T : BehaviourBase
+    public T AddBehaviour<T>() where T : BehaviourBase
     {
         ClassInjector.RegisterTypeInIl2Cpp<T>();
-        game_object.AddComponent<T>();
+        T behaviour = game_object.AddComponent<T>();
+        return behaviour;
     }
 
-    public void AddAttachmentPoint(AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation)
+    public void AddLinkPoint(string link_name, LinkType link_type, Vector3 position, bool can_send, bool can_receive)
     {
-        GameObject point_grid = new GameObject("PointGrid");
-        point_grid.transform.parent = game_object.transform;
+        GameObject link_node_object = new GameObject("LinkNode_"+link_name);
+        link_node_object.transform.parent = game_object.transform;
+        link_node_object.transform.position = position;
+        link_node_object.layer = 14;
 
+        PartLinkNode link_node = link_node_object.AddComponent<PartLinkNode>();
+        link_node.type = link_type;
+        link_node.maxNumOutgoingLinks = can_send ? (byte)255 : (byte)0;
+        link_node.maxNumIncomingLinks = can_receive ? (byte)255 : (byte)0;
+    }
+
+    public void AddAttachmentPoint(string attachment_name, AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation)
+    {
+        GameObject point_grid = new GameObject("PointGrid_"+attachment_name);
+        point_grid.transform.parent = game_object.transform;
+        
         PartPointGrid part_point_grid = point_grid.AddComponent<PartPointGrid>();
         part_point_grid.gridUnitSize = new Vector3Int(1, 1, 1);
         part_point_grid.Position = position;
