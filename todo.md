@@ -2,7 +2,9 @@
 - [ ] Create cutom motor parts
 - [ ] Create custom gear parts
 - [ ] Import custom materials into the game
-- [ ] Create custom categories in the parts tab
+- [ ] (STUCK) Create custom categories in the parts tab
+- [ ] Provide option to make configurable parts
+- [ ] Provide access to the games default data type links via enum
 - [ ] Add custom GUI options (Shift+E menu) for changing part values as a player
 - [ ] Provide modder direct access to the part properties to modify things such as density, paintable, swappable materials, etc.
 - [ ] Proper colliders for custom models (Currently only generates Boxcolliders)
