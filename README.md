@@ -12,20 +12,12 @@ GearLib does **NOTHING** by itself. This mod is simply a tool for modders to cre
 I am currently in talks with the Thunderstore team. We're hoping to have GearBlocks mods available on the Thunderstore in the near future! This will make it as easy as clicking the mods you want to download in the future.
 
 ## Feature For Modding
-While these features are possible in BepInEx alone without GearLib, they'd require manual manipulation of the game assets without help from GearLib. Below are the features we're working through and which ones are ready to go with this release. This list serves as both a to-do and feature list, and will be altered with releases showing the major features supported, removing the minor to-do items.
+While these features are possible in BepInEx alone without GearLib, they'd require manual manipulation of the game assets without help from GearLib. Below are the features ready to go with this release.
 
 - [x] Import custom models into the game
 - [x] Add attachments to parts for mounting to other parts
-- [ ] Add link nodes for linking parts together logically
-- [ ] Create cutom motor parts
-- [ ] Create custom gear parts
-- [ ] Import custom materials into the game
-- [ ] Create custom categories in the parts tab
+- [x] Add link nodes for linking parts together logically
 - [x] Add custom behaviour scripts for parts to provide part logic
-- [ ] Add custom GUI options (Shift+E menu) for changing part values as a player
-- [ ] Provide modder direct access to the part properties to modify things such as density, paintable, etc.
-- [ ] Proper colliders for custom models (Currently only generates Boxcolliders)
-- [ ] Create a GearLib.Unity namespace for users to import into Unity, allowing creation of attachments and various other components directly to their prefab. This will allow easier placement of attachments versus writing it in code
 
 ## Installation (Modder)
 **Please let me know of any issues during this process, as there has been minimal testing here thus far**
