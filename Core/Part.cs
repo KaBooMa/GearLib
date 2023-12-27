@@ -1,5 +1,6 @@
 using GearLib.Patches;
 using GearLib.Utils;
+using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using SmashHammer.Core;
 using SmashHammer.GearBlocks.Construction;
@@ -12,17 +13,20 @@ namespace GearLib.Core;
 public class Part : MonoBehaviour
 {
     public GameObject game_object;
-    PartDescriptor descriptor;
+    public PartDescriptor descriptor;
+    public PartPropertiesBase properties;
 
-    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category)
+    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f)
     {
         game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
 
         // Create mandatory components for new asset
         descriptor = game_object.AddComponent<PartDescriptor>();
-        PartPropertiesBasic points = game_object.AddComponent<PartPropertiesBasic>();
+        PartPropertiesBasic basic_properties = game_object.AddComponent<PartPropertiesBasic>();
+        basic_properties.mass = mass;
+        properties = basic_properties;
         game_object.AddComponent<PartPoints>();
-
+        
 
         // TODO: Clean up this old collider handling
         // Current handling converts mesh dimensions to a box collider
@@ -57,20 +61,40 @@ public class Part : MonoBehaviour
         }
         // END TODO
 
+        // Setup layers
+        LayerAsset default_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        default_layer.name = "Default";
+        default_layer.index = 0;
+
+        LayerAsset dematerialising_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        dematerialising_layer.name = "Dematerialising";
+        dematerialising_layer.index = 29;
+
+        LayerAsset highlighting_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        highlighting_layer.name = "Highlighting";
+        highlighting_layer.index = 19;
+
+        LayerAsset selected_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        selected_layer.name = "Selected";
+        selected_layer.index = 27;
+
+        LayerAsset frozen_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        frozen_layer.name = "Frozen";
+        frozen_layer.index = 28;
+
+        LayerMaskAsset intersection_layer_mask = ScriptableObject.CreateInstance<LayerMaskAsset>();
+        intersection_layer_mask.layers.AddItem(selected_layer);
+        intersection_layer_mask.layers.AddItem(frozen_layer);
+
         // Setup default variables for new components
         descriptor.displayName = display_name;
         descriptor.category = category;
-        descriptor.defaultLayer = new LayerAsset() {name = "Default", index = 0};
-        descriptor.dematerialisingLayer = new LayerAsset() {name = "Dematerialising", index = 29};
-        descriptor.highlightingLayer = new LayerAsset() {name = "Hightlighting", index = 19};
+        descriptor.defaultLayer = default_layer;
+        descriptor.dematerialisingLayer = dematerialising_layer;
+        descriptor.highlightingLayer = highlighting_layer;
 
         // TODO: This list creation might can be shortened. IDE says so but once compiled, it errors. 
-        descriptor.intersectionLayerMask = new LayerMaskAsset() {
-            layers = new Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<LayerAsset>(new LayerAsset[] {
-                    new LayerAsset() {name = "Selected", index = 27},
-                    new LayerAsset() {name = "Frozen", index = 28}
-            })
-        };
+        descriptor.intersectionLayerMask = intersection_layer_mask;
         // END TODO
 
         PartsDatabase.Add(part_uid, game_object);
@@ -81,6 +105,7 @@ public class Part : MonoBehaviour
     {
         ClassInjector.RegisterTypeInIl2Cpp<T>();
         T behaviour = game_object.AddComponent<T>();
+        descriptor.Behaviours.AddItem(behaviour);
         return behaviour;
     }
 
