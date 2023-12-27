@@ -8,7 +8,7 @@ namespace GearLib.Core.BehaviourFields;
 public class FloatField : FloatTweakable
 {
 
-    public FloatField(string label, string tooltip_text = null, int value = 0, int min = 0, int max = 1) : base(label, min, max, value, tooltip_text, FieldConstants.bool_expr_asset)
+    public FloatField(string label, string tooltip_text = null, float value = 0, float min = 0, float max = 1) : base(label, min, max, value, tooltip_text, FieldConstants.bool_expr_asset)
     {
         Value = value;
         Min = min;
