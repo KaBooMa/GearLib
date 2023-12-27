@@ -10,7 +10,7 @@ namespace GearLib;
 
 public class BehaviourBase : PartBehaviourBase
 {
-    public unsafe override string Name { get; }
+    public override string Name { get; }
     public PartDescriptor descriptor { get { return gameObject.GetComponent<PartDescriptor>(); }}
     public Composite composite { get { return transform.parent.GetComponent<Composite>(); }}
     public Rigidbody rigidBody { get { return composite.GetComponent<Rigidbody>(); }}
