@@ -1,19 +1,23 @@
-using Il2CppInterop.Runtime;
 using SmashHammer.Variables;
-using UnityEditor.Experimental;
 using UnityEngine;
 
 namespace GearLib.Core.BehaviourFields;
 
 public class FieldConstants
 {
-    public static BoolVariableAsset bool_variable_asset; // = ScriptableObject.CreateInstance<BoolVariableAsset>(); //new BoolVariableAsset() { reset = true, syncToNetworkClients = true };
-    public static BoolExprAsset bool_expr_asset; // = //(BoolExprAsset)ScriptableObject.CreateInstance(Il2CppType.Of<BoolExprAsset>()) { expr = "" };//new BoolExprAsset() { expr = "A !" };
+    public static BoolExprAsset bool_expr_asset;
+    public static Il2CppInterop.Runtime.InteropTypes.Arrays.Il2CppReferenceArray<BoolVariableAsset> bool_vars;
 
     static FieldConstants()
     {
-        bool_variable_asset = ScriptableObject.CreateInstance<BoolVariableAsset>();
+        BoolVariableAsset bool_variable_asset = ScriptableObject.CreateInstance<BoolVariableAsset>();
+        bool_variable_asset.reset = true;
+        bool_variable_asset.syncToNetworkClients = true;
+
         bool_expr_asset = ScriptableObject.CreateInstance<BoolExprAsset>();
         bool_expr_asset.expr = "A !";
+        bool_vars = new BoolVariableAsset[] { bool_variable_asset };
+
+        bool_expr_asset.boolVars = bool_vars;
     }
 }

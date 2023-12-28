@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using GearLib.Core.BehaviourFields;
+using Il2CppInterop.Runtime.Injection;
 using SmashHammer.GearBlocks.Construction;
+using SmashHammer.GearBlocks.Tweakables;
 using UnityEngine;
 
 namespace GearLib;
@@ -15,28 +17,46 @@ public class BehaviourBase : PartBehaviourBase
     public Composite composite { get { return transform.parent.GetComponent<Composite>(); }}
     public Rigidbody rigidBody { get { return composite.GetComponent<Rigidbody>(); }}
     public Construction construction { get { return descriptor.ParentConstruction; }}
+    public new Il2CppSystem.Collections.Generic.List<TweakableBase> Tweakables = new Il2CppSystem.Collections.Generic.List<TweakableBase>();
     
     public BehaviourBase() : base()
     {
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(IntField))) Tweakables.Add((IntField)field.GetValue(this));
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(StringField))) Tweakables.Add((StringField)field.GetValue(this));
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(JoystickField))) Tweakables.Add((JoystickField)field.GetValue(this));
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(InputField))) Tweakables.Add((InputField)field.GetValue(this));
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(FloatField))) Tweakables.Add((FloatField)field.GetValue(this));
-        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(BooleanField))) Tweakables.Add((BooleanField)field.GetValue(this));
-    }
-
-    public Dictionary<string, GameObject> linked_parts { get {
-        Dictionary<string, GameObject> linked_parts = new Dictionary<string, GameObject>();
-        foreach (PartLinkNode source_link in gameObject.transform.GetComponentsInChildren<PartLinkNode>()) 
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(IntField))) 
         {
-            foreach (PartLinkNode target_link in source_link.LinkedNodes)
-            {
-                if (target_link.Part) linked_parts.Add(source_link.transform.gameObject.name.Replace("LinkNode_", ""), target_link.Part.transform.gameObject);
-            }
+            Tweakables.Add((IntField)field.GetValue(this));
+            base.Tweakables.Add((IntField)field.GetValue(this));
         }
-        return linked_parts;
-    }}
+
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(StringField))) 
+        {
+            Tweakables.Add((StringField)field.GetValue(this));
+            base.Tweakables.Add((StringField)field.GetValue(this));
+        }
+
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(JoystickField))) 
+        {
+            Tweakables.Add((JoystickField)field.GetValue(this));
+            base.Tweakables.Add((JoystickField)field.GetValue(this));
+        }
+
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(InputField))) 
+        {
+            Tweakables.Add((InputField)field.GetValue(this));
+            base.Tweakables.Add((InputField)field.GetValue(this));
+        }
+
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(FloatField))) 
+        {
+            Tweakables.Add((FloatField)field.GetValue(this));
+            base.Tweakables.Add((FloatField)field.GetValue(this));
+        }
+
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.FieldType == typeof(BooleanField))) 
+        {
+            Tweakables.Add((BooleanField)field.GetValue(this));
+            base.Tweakables.Add((BooleanField)field.GetValue(this));
+        }
+    }
 
     public List<GameObject> GetLinkedParts(string link_name)
     {
