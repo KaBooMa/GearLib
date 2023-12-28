@@ -14,7 +14,6 @@ class PartsDatabase : MonoBehaviour
     // Patches the database load to load modded parts AFTER game parts are loaded
     private static void Postfix(PartDatabaseAsset __instance)
     {
-        Plugin.Log.LogInfo("Adding mod parts...");
         foreach (KeyValuePair<ulong, GameObject> part in new_parts)
         {
             PartEntry new_entry = new PartEntry(part.Value);

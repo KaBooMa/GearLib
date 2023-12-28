@@ -18,6 +18,7 @@ public class Part : MonoBehaviour
 
     public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f)
     {
+        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
         game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
 
         // Create mandatory components for new asset
@@ -76,7 +77,6 @@ public class Part : MonoBehaviour
         descriptor.intersectionLayerMask = intersection_layer_mask;
 
         PartsDatabase.Add(part_uid, game_object);
-        Plugin.Log.LogInfo($"Queued custom part [{display_name}] to be added at load.");
     }
 
     public T AddBehaviour<T>() where T : BehaviourBase
@@ -87,7 +87,7 @@ public class Part : MonoBehaviour
         return behaviour;
     }
 
-    public void AddLinkPoint(string link_name, LinkType link_type, Vector3 position, bool can_send, bool can_receive)
+    public void AddLinkPoint(string link_name, LinkType link_type, Vector3 position, bool can_send = true, bool can_receive = true)
     {
         GameObject link_node_object = new GameObject("LinkNode_"+link_name);
         link_node_object.transform.parent = game_object.transform;
