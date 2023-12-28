@@ -26,6 +26,7 @@ public class Part : MonoBehaviour
         PartPropertiesBasic basic_properties = game_object.AddComponent<PartPropertiesBasic>();
         basic_properties.mass = mass;
         properties = basic_properties;
+        game_object.AddComponent<PartPoints>();
 
         // Destroy any existing colliders that might have been imported
         foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) Destroy(collider);
