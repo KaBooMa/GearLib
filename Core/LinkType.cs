@@ -9,13 +9,13 @@ public class LinkType
     public static Dictionary<string, PartLinkTypeAsset> link_types = new Dictionary<string, PartLinkTypeAsset>();
     public PartLinkTypeAsset asset;
 
-    public LinkType(string link_name, Color color)
+    public LinkType(string link_type, Color color)
     {
-        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom link [{link_name}]");
+        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom link [{link_type}]");
         asset = ScriptableObject.CreateInstance<PartLinkTypeAsset>();
-        asset.name = link_name;
-        asset.displayName = link_name;
+        asset.name = link_type;
+        asset.displayName = link_type;
         asset.colour = color;
-        link_types.Add(link_name, asset);
+        link_types.Add(link_type, asset);
     }
 }

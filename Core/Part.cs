@@ -88,19 +88,19 @@ public class Part : MonoBehaviour
         return behaviour;
     }
 
-    public void AddLinkPoint(string link_name, Vector3 position, bool can_send = true, bool can_receive = true)
+    public void AddLinkPoint(string name, string link_type, Vector3 position, bool can_send = true, bool can_receive = true)
     {
-        PartLinkTypeAsset link_type;
-        LinkType.link_types.TryGetValue(link_name, out link_type);
-        if (!link_type) Plugin.Log.LogError($"Missing link type: [{link_name}]!!");
+        PartLinkTypeAsset asset;
+        LinkType.link_types.TryGetValue(link_type, out asset);
+        if (!asset) Plugin.Log.LogError($"Missing link type: [{link_type}]!!");
 
-        GameObject link_node_object = new GameObject("LinkNode_"+link_name);
+        GameObject link_node_object = new GameObject("LinkNode_"+name);
         link_node_object.transform.parent = game_object.transform;
         link_node_object.transform.position = position;
         link_node_object.layer = 14;
         
         PartLinkNode link_node = link_node_object.AddComponent<PartLinkNode>();
-        link_node.type = link_type;
+        link_node.type = asset;
         link_node.maxNumOutgoingLinks = can_send ? (byte)255 : (byte)0;
         link_node.maxNumIncomingLinks = can_receive ? (byte)255 : (byte)0;
     }
