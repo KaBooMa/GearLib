@@ -5,9 +5,11 @@ namespace GearLib.Core;
 
 public class LinkType : PartLinkTypeAsset
 {
-    public LinkType(string display_name, Color color)
+    public LinkType(string link_name, Color color)
     {
-        displayName = display_name;
+        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom link [{link_name}]");
+        name = link_name;
+        displayName = link_name;
         colour = color;
     }
 }
