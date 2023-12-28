@@ -25,41 +25,22 @@ public class Part : MonoBehaviour
         PartPropertiesBasic basic_properties = game_object.AddComponent<PartPropertiesBasic>();
         basic_properties.mass = mass;
         properties = basic_properties;
-        game_object.AddComponent<PartPoints>();
+
+        // Destroy any existing colliders that might have been imported
+        foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) Destroy(collider);
+        foreach (BoxCollider collider in game_object.GetComponentsInChildren<BoxCollider>()) Destroy(collider);
+        foreach (SphereCollider collider in game_object.GetComponentsInChildren<SphereCollider>()) Destroy(collider);
+        foreach (CapsuleCollider collider in game_object.GetComponentsInChildren<CapsuleCollider>()) Destroy(collider);
         
-
-        // TODO: Clean up this old collider handling
-        // Current handling converts mesh dimensions to a box collider
-        // This means custom parts are squared, even circular ones
-
-        // foreach (BoxCollider collider in game_object.GetComponentsInChildren<BoxCollider>())
-        // {
-        //     BoxCollisionVolume volume = collider.transform.parent.gameObject.AddComponent<BoxCollisionVolume>();
-        //     volume.size = collider.transform.localScale;
-        //     volume.center = collider.transform.position;
-        //     Destroy(collider);
-        // }
-
-        // foreach (CapsuleCollider collider in game_object.GetComponentsInChildren<CapsuleCollider>())
-        // {
-        //     CapsuleCollisionVolume volume = collider.transform.parent.gameObject.AddComponent<CapsuleCollisionVolume>();
-        //     volume.radius = collider.radius;
-        //     volume.height = collider.height;
-        //     volume.center = collider.center;
-        //     Destroy(collider);
-        // }
-        foreach (MeshRenderer collider in game_object.GetComponentsInChildren<MeshRenderer>())
+        // For each mesh we want to add a new box collider
+        foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
         {
-            BoxCollisionVolume volume = collider.transform.parent.gameObject.AddComponent<BoxCollisionVolume>();
-            volume.size = collider.bounds.size;
-            volume.center = collider.bounds.center;
+            GameObject collider = new GameObject("Collider");
+            collider.transform.SetParent(game_object.transform);
+            BoxCollisionVolume volume = collider.AddComponent<BoxCollisionVolume>();
+            volume.size = mesh_renderer.bounds.size;
+            volume.center = mesh_renderer.bounds.center;
         }
-
-        foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>())
-        {
-            Destroy(collider);
-        }
-        // END TODO
 
         // Setup layers
         LayerAsset default_layer = ScriptableObject.CreateInstance<LayerAsset>();
@@ -92,13 +73,10 @@ public class Part : MonoBehaviour
         descriptor.defaultLayer = default_layer;
         descriptor.dematerialisingLayer = dematerialising_layer;
         descriptor.highlightingLayer = highlighting_layer;
-
-        // TODO: This list creation might can be shortened. IDE says so but once compiled, it errors. 
         descriptor.intersectionLayerMask = intersection_layer_mask;
-        // END TODO
 
         PartsDatabase.Add(part_uid, game_object);
-        Plugin.Log.LogInfo($"Queued {display_name} to be added.");
+        Plugin.Log.LogInfo($"Queued custom part [{display_name}] to be added at load.");
     }
 
     public T AddBehaviour<T>() where T : BehaviourBase
