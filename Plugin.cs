@@ -14,7 +14,8 @@ public class Plugin : BasePlugin
     public override void Load()
     {
         Log = base.Log;
-        Harmony.CreateAndPatchAll(typeof(PartsDatabase));
+        Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+        harmony.PatchAll();
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }
 }
