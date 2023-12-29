@@ -57,9 +57,11 @@ public class BehaviourBase : PartBehaviourBase
 
     public AttachmentBase GetAttachment(string attachment_name)
     {
-        foreach (Il2CppSystem.Collections.Generic.KeyValuePair<IPart, AttachmentBase> attachment in descriptor.Attachments.ownedAttachments)
+        foreach (AttachmentBase attachment in descriptor.Attachments.associatedAttachments)
         {
-            if (attachment.value.ownerPartPointGrid.gameObject.name.Replace("PointGrid_", "") == attachment_name) return attachment.value;
+            if (attachment.ownerPartPointGrid.name.Replace("PointGrid_", "") == attachment_name || 
+                attachment.connectedPartPointGrid.name.Replace("PointGrid_", "") == attachment_name) 
+                return attachment;
         }
 
         return null;
