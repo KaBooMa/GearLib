@@ -11,10 +11,12 @@ public class FieldConstants
     static FieldConstants()
     {
         BoolVariableAsset bool_variable_asset = ScriptableObject.CreateInstance<BoolVariableAsset>();
+        bool_variable_asset.name = "LimitedPartBehaviourTweaking";
         bool_variable_asset.reset = true;
         bool_variable_asset.syncToNetworkClients = true;
 
         bool_expr_asset = ScriptableObject.CreateInstance<BoolExprAsset>();
+        bool_expr_asset.name = "TweakPartBehavioursExpr";
         bool_expr_asset.expr = "A !";
         bool_vars = new BoolVariableAsset[] { bool_variable_asset };
 
