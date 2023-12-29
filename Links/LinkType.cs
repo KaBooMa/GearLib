@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using SmashHammer.GearBlocks.Construction;
 using UnityEngine;
 
-namespace GearLib.Core;
+namespace GearLib.Links;
 
 public class LinkType
 {

@@ -1,3 +1,5 @@
+using GearLib.Behaviours;
+using GearLib.Links;
 using GearLib.Patches;
 using GearLib.Utils;
 using HarmonyLib;
@@ -8,7 +10,7 @@ using SmashHammer.Physics;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartPointGrid;
 
-namespace GearLib.Core;
+namespace GearLib.Parts;
 
 public class Part : MonoBehaviour
 {

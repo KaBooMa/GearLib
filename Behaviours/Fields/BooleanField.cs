@@ -1,6 +1,6 @@
 using SmashHammer.GearBlocks.Tweakables;
 
-namespace GearLib.Core.BehaviourFields;
+namespace GearLib.Behaviours.Fields;
 
 public class BooleanField : BooleanTweakable
 {

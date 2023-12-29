@@ -1,7 +1,7 @@
 using SmashHammer.GearBlocks.Tweakables;
 using SmashHammer.Input;
 
-namespace GearLib.Core.BehaviourFields;
+namespace GearLib.Behaviours.Fields;
 
 public class JoystickField : JoystickAxisTweakable
 {

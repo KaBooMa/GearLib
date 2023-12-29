@@ -1,9 +1,6 @@
-using System;
 using SmashHammer.GearBlocks.Tweakables;
-using SmashHammer.Variables;
-using UnityEngine;
 
-namespace GearLib.Core.BehaviourFields;
+namespace GearLib.Behaviours.Fields;
 
 public class IntField : IntTweakable
 {

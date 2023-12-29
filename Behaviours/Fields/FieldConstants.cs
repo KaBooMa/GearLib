@@ -1,7 +1,7 @@
 using SmashHammer.Variables;
 using UnityEngine;
 
-namespace GearLib.Core.BehaviourFields;
+namespace GearLib.Behaviours.Fields;
 
 public class FieldConstants
 {
