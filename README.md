@@ -3,6 +3,12 @@ This library is aimed at making GearBlocks modding easier. People familiar with 
 
 GearLib does **NOTHING** by itself. This mod is simply a tool for modders to create mods for the game. However, it is a requirement for any mods made using it. Modders please let people know this is a requirement and write the requirement into your mod before distribution.
 
+## Spotlighted Mods using GearLib!
+### Combustion Motors
+Adds in combustion motor parts for building your own engines!\
+https://github.com/KaBooMa/CombustionMotors\
+![Alt Text](imgs/spotlights/combustionmotors.png)
+
 ## Installation (Player)
 - Install BepInEx 6 into your GearBlocks folder **(Currently confirmed working version is BE release #679, IL2CPP-win-x86. You can download that here: https://builds.bepinex.dev/projects/bepinex_be)**
 - Install GearLib into your new BepInEx/plugins folder.
@@ -18,6 +24,7 @@ While these features are possible in BepInEx alone without GearLib, they'd requi
 - [x] Add attachments to parts for mounting to other parts
 - [x] Add link nodes for linking parts together logically
 - [x] Add custom behaviour scripts for parts to provide part logic
+- [x] Parts can have their own configurable options within their scripts
 
 ## Installation (Modder)
 **Please let me know of any issues during this process, as there has been minimal testing here thus far**
@@ -34,15 +41,12 @@ Ensure you have an IDE installed. I will be using VSCode during this guide, howe
 - Install the .NET SDK 6.0 from here: 
 - Grab the BepInEx templates by opening your terminal and using command `dotnet new -i BepInEx.Templates::2.0.0-be.1 --nuget-source https://nuget.bepinex.dev/v3/index.json`
 - Create your new plugin directory using the template. You can do this by opening a terminal in the directory you want it stored in and using command `dotnet new bep6plugin_unity_il2cpp -n MyFirstPlugin -T net35`
-- You now have a plugin directory! However, there's a couple dependencies you'll want to ensure you can mod for GearBlocks. I recommend creating a directory in your plugin directory called "libs". The name doesn't matter, since you'll be referencing it anyways and can modify to fit your wants.
-  - I recommend starting with at least "SmashHammer.dll, SmashHammer.GearBlocks.dll, UnityEngine.dll, UnityEngine.CoreModule.dll, and GearLib.dll". You can pull in additional references as needed. For example, if you wish to alter Rigidbodies in your plugin, you'll need UnityEngine.PhysicsModule.dll. 
+- You now have a plugin directory! However, there's a couple dependencies you'll want to ensure you can mod for GearBlocks. I recommend creating a directory in your plugin directory called "libs". The name doesn't matter, since you'll be referencing it anyways and can modify to fit your wants. **Game dependencies are found under `BepInEx/interop`. Ensure you grab them from here!!**
+  - I recommend starting with at least "SmashHammer.dll, SmashHammer.GearBlocks.dll, UnityEngine.dll, UnityEngine.CoreModule.dll, and GearLib.dll". You can pull in additional references as needed. For example, if you wish to alter Rigidbodies in your plugin, you'll need UnityEngine.PhysicsModule.dll. \
 ![Alt text](imgs/libs.png)
-
-- Now that you have your references in their directory, you need to reference them. Open your MyFirstPlugin.csproj file, and add the references to your specific files, as seen below.
-
+- Now that you have your references in their directory, you need to reference them. Open your MyFirstPlugin.csproj file, and add the references to your specific files, as seen below.\
 ![Alt text](imgs/references.png)
-- One last piece for your BepInEx plugin, add a dependency for "GearLib" to it! This is done by adding `[BepInDependency("GearLib")]` above your plugin class.
-
+- One last piece for your BepInEx plugin, add a dependency for "GearLib" to it! This is done by adding `[BepInDependency("GearLib")]` above your plugin class.\
 ![Alt text](imgs/gearlib-dep.png)
 
 ### Third Part: Unity Setup
@@ -51,8 +55,7 @@ You'll need to install Unity version 2021.3.33f1 specifically to create your Ass
 - Download Unity here: https://unity.com/releases/editor/whats-new/2021.3.33
 - You'll also need Unity Hub for it to work. You can grab that off the main Unity page here: https://unity.com/unity-hub
 - Create a new Unity Project 3D. No settings need changed, you can name it whatever.
-- You'll want to install a Unity package called "Asset Bundle Browser". This lets us export our Asset Bundles from the project. In Unity, click "Window > Package Manager", then click the "+" in the top-left and "Add package from git URL...". Paste in "https://github.com/Unity-Technologies/AssetBundles-Browser" and click "Add"
-
+- You'll want to install a Unity package called "Asset Bundle Browser". This lets us export our Asset Bundles from the project. In Unity, click "Window > Package Manager", then click the "+" in the top-left and "Add package from git URL...". Paste in "https://github.com/Unity-Technologies/AssetBundles-Browser" and click "Add"\
 ![Alt text](imgs/asset-bundler.png)
 - Lets create a test prefab. At the bottom project section, click the "Assets" folder and right click the background. "Create > Prefab", name it whatever you wish, but remember the name as you'll reference it in your plugin code later.
 - Double click your new prefab and for testing purposes, right click your prefab object on the left panel, "3D Object > Cube". You now have a cube!
@@ -60,15 +63,15 @@ You'll need to install Unity version 2021.3.33f1 specifically to create your Ass
 - Add a new "Empty" game object to your prefab and call it "Collider". It doesn't really matter on naming, but Collider is what the GearBlocks developer names these.
 - Add a component "MeshCollider" to your Collider game object. Under the "Mesh" property, click and assign the cube model as the mesh.
 - To export your new prefab for loading into the game, click your prefab at the bottom panel and at the bottom right, assign a new bundle name to it.
-
-![Alt text](imgs/bundle-naming.png)
-- Now under "Window > Asset Bundle Browser", you can click the "Build" tab and "Build" button. It will store it in your Unity project folder under Assetbundles/Standalone by default. You only need the one named your bundle, such as the picture below.
-
+![Alt text](imgs/bundle-naming.png)\
+- Now under "Window > Asset Bundle Browser", you can click the "Build" tab and "Build" button. It will store it in your Unity project folder under Assetbundles/Standalone by default. You only need the one named your bundle, such as the picture below.\
 ![Alt text](imgs/prefab-example.png)
 - Your new bundle is ready to be added to your plugin folder. You need to include this same asset along with your distribution for players, or embed it into your plugin DLL.
 
 ## Modding Guidance
-Reach out in the official Discord to KaBooMa for guidance at this time. Example mods will be included later in this project, but as of now, are not. Some quick guidance is provided here:
+Reach out in the official Discord to KaBooMa for guidance at this time. See the spotlighted mods for examples!
+
+### Quick Guidance
 - Unity Explorer can really help you see what is going on in the game. The working version of UE is located here: https://github.com/sinai-dev/UnityExplorer/releases/latest/download/UnityExplorer.BepInEx.IL2CPP.CoreCLR.zip
 - GearLib.Parts contains a Part class that can be used to create new parts within the game. `Part my_custom_part  = new Part("MyPluginFolder/assets/my_custom_prefab", "PrefabNameInUnity", 1234, "My Custom Parts Name", "Props");`
   - Take note, 1234 is a unique id for your part. Use something random for now till a better solution is found for the library. Overlapping ids with other parts will cause the game to crash.
