@@ -38,7 +38,7 @@ Follow the player installation guide above to get your game setup and ready for 
 
 ### Second Part: BepInEx Setup
 Ensure you have an IDE installed. I will be using VSCode during this guide, however, VSCommuntiy is perfectly viable as well. It might even make some steps easier :)
-- Install the .NET SDK 6.0 from here: 
+- Install the .NET SDK 6.0 from here: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 - Grab the BepInEx templates by opening your terminal and using command `dotnet new -i BepInEx.Templates::2.0.0-be.1 --nuget-source https://nuget.bepinex.dev/v3/index.json`
 - Create your new plugin directory using the template. You can do this by opening a terminal in the directory you want it stored in and using command `dotnet new bep6plugin_unity_il2cpp -n MyFirstPlugin -T net35`
 - You now have a plugin directory! However, there's a couple dependencies you'll want to ensure you can mod for GearBlocks. I recommend creating a directory in your plugin directory called "libs". The name doesn't matter, since you'll be referencing it anyways and can modify to fit your wants. **Game dependencies are found under `BepInEx/interop`. Ensure you grab them from here!!**
