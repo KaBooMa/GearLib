@@ -86,7 +86,6 @@ public class Part : MonoBehaviour
     {
         ClassInjector.RegisterTypeInIl2Cpp<T>();
         T behaviour = game_object.AddComponent<T>();
-        descriptor.Behaviours.AddItem(behaviour);
         return behaviour;
     }
 
