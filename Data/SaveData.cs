@@ -49,28 +49,22 @@ sealed class SaveData
 
                 foreach (BehaviourBase modded_behaviour in modded_behaviours)
                 {
-            Plugin.Log.LogInfo("FloatField");
                     BehaviourData behaviour_data = new BehaviourData();
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(FloatField)))) 
                         behaviour_data.AddTweakable(field.Name, new FloatData(Convert.ToSingle(field.GetValue(modded_behaviour))));
 
-            Plugin.Log.LogInfo("BooleanField");
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(BooleanField)))) 
                         behaviour_data.AddTweakable(field.Name, new BooleanData((bool)field.GetValue(modded_behaviour)));
 
-            Plugin.Log.LogInfo("IntField");
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(IntField)))) 
                         behaviour_data.AddTweakable(field.Name, new IntData(Convert.ToInt32(field.GetValue(modded_behaviour))));
 
-            Plugin.Log.LogInfo("StringField");
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(StringField)))) 
                         behaviour_data.AddTweakable(field.Name, new StringData(Convert.ToString(field.GetValue(modded_behaviour))));
 
-            Plugin.Log.LogInfo("InputField");
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(InputField)))) 
                         behaviour_data.AddTweakable(field.Name, new InputData((InputAction)field.GetValue(modded_behaviour)));
 
-            Plugin.Log.LogInfo("JoystickField");
                     foreach (FieldInfo field in modded_behaviour.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(JoystickField))))
                         behaviour_data.AddTweakable(field.Name, new JoystickData((JoystickAxis)field.GetValue(modded_behaviour)));
 
@@ -150,7 +144,6 @@ sealed class SaveData
                         }
                         else if (field.IsDefined(typeof(InputField)))
                         {
-            Plugin.Log.LogInfo("InputField");
                             object tweakable;
                             behaviour_data.tweakables.TryGetValue(field.Name, out tweakable);
                             if (tweakable == null) { Plugin.Log.LogError("Saved field not found for modded part!"); continue; }
@@ -165,7 +158,6 @@ sealed class SaveData
                         }
                         else if (field.IsDefined(typeof(IntField)))
                         {
-            Plugin.Log.LogInfo("IntField");
                             object tweakable;
                             behaviour_data.tweakables.TryGetValue(field.Name, out tweakable);
                             if (tweakable == null) { Plugin.Log.LogError("Saved field not found for modded part!"); continue; }
@@ -174,12 +166,10 @@ sealed class SaveData
                         }
                         else if (field.IsDefined(typeof(JoystickField)))
                         {
-            Plugin.Log.LogInfo("JoystickField");
                             object tweakable;
                             behaviour_data.tweakables.TryGetValue(field.Name, out tweakable);
                             if (tweakable == null) { Plugin.Log.LogError("Saved field not found for modded part!"); continue; }
                             {
-                                Plugin.Log.LogWarning(Enum.Parse<AxisCode>(((JsonElement)tweakable).GetProperty("axis_code").GetInt32().ToString()));
                                 JoystickAxis joystick_axis = ((JoystickAxisTweakable)modded_behaviour.tweakables_dict[field.Name]).value;
                                 // TODO: Fix axis binding for Joystick
                                 // Axis axis = new Axis(Enum.Parse<AxisCode>(((JsonElement)tweakable).GetProperty("axis_code").GetInt32().ToString()));
@@ -192,7 +182,6 @@ sealed class SaveData
                         }
                         else if (field.IsDefined(typeof(StringField)))
                         {
-            Plugin.Log.LogInfo("StringField");
                             object tweakable;
                             behaviour_data.tweakables.TryGetValue(field.Name, out tweakable);
                             if (tweakable == null) { Plugin.Log.LogError("Saved field not found for modded part!"); continue; }
