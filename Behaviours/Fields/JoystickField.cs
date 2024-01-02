@@ -1,10 +1,11 @@
-using SmashHammer.GearBlocks.Tweakables;
+using System;
 using SmashHammer.Input;
 
 namespace GearLib.Behaviours.Fields;
 
-public class JoystickField : JoystickAxisTweakable
+public class JoystickField : Attribute, IField
 {
-
-    public JoystickField(string label, string tooltip_text = null) : base(label, new JoystickAxis(), tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public JoystickAxis initial_value { get; set; } = new JoystickAxis();
 }

@@ -1,10 +1,12 @@
-using SmashHammer.GearBlocks.Tweakables;
+using System;
 using SmashHammer.Input;
 
 namespace GearLib.Behaviours.Fields;
 
-public class InputField : InputActionTweakable
+public class InputField : Attribute, IField
 {
 
-    public InputField(string label, string tooltip_text = null) : base(label, new InputAction(), tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public InputAction initial_value { get; set; } = new InputAction();
 }

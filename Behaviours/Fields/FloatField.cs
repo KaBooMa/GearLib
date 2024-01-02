@@ -1,10 +1,13 @@
 using System;
-using SmashHammer.GearBlocks.Tweakables;
 
 namespace GearLib.Behaviours.Fields;
 
-[Serializable]
-public class FloatField : FloatTweakable
+
+public class FloatField : Attribute, IField
 {
-    public FloatField(string label, string tooltip_text = null, float value = 0, float min = 0, float max = 1) : base(label, min, max, value, tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public float initial_value { get; set; } = 0f;
+    public float minimum_value { get; set; } = 0f;
+    public float maximum_value { get; set; } = 1f;
 }

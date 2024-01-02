@@ -1,8 +1,12 @@
-using SmashHammer.GearBlocks.Tweakables;
+using System;
 
 namespace GearLib.Behaviours.Fields;
 
-public class IntField : IntTweakable
+public class IntField : Attribute, IField
 {
-    public IntField(string label, string tooltip_text = null, int value = 0, int min = 0, int max = 1) : base(label, min, max, value, tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public int initial_value { get; set; } = 0;
+    public int minimum_value { get; set; } = 0;
+    public int maximum_value { get; set; } = 10;
 }

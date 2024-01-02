@@ -1,9 +1,11 @@
-using SmashHammer.GearBlocks.Tweakables;
+using System;
 
 namespace GearLib.Behaviours.Fields;
 
-public class StringField : StringTweakable
+public class StringField : Attribute, IField
 {
-
-    public StringField(string label, string tooltip_text = null, string value = "", bool multiple_lines = false) : base(label, multiple_lines, value, tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public string initial_value { get; set; } = "";
+    public bool multiple_lines { get; set; } = false;
 }

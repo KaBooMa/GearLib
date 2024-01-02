@@ -1,8 +1,10 @@
-using SmashHammer.GearBlocks.Tweakables;
+using System;
 
 namespace GearLib.Behaviours.Fields;
 
-public class BooleanField : BooleanTweakable
+public class BooleanField : Attribute, IField
 {
-    public BooleanField(string label, string tooltip_text = null, bool value = false) : base(label, value, tooltip_text, null) { }
+    public string label { get; set; } = "MissingLabel";
+    public string tooltip_text { get; set; } = "MissingTooltipText";
+    public bool initial_value { get; set; } = false;
 }
