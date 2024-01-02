@@ -115,7 +115,7 @@ public class BehaviourBase : PartBehaviourBase
             tweakables_dict.TryGetValue(field.Name, out tweakable);
             JoystickAxisTweakable joystick_tweakable = (JoystickAxisTweakable)tweakable;
             if (joystick_tweakable.value != ((JoystickAxis)field.GetValue(this)))
-                {field.SetValue(this, joystick_tweakable.value); Plugin.Log.LogError("RAN");}
+                field.SetValue(this, joystick_tweakable.value);
         }
         foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(StringField)))) 
         {
