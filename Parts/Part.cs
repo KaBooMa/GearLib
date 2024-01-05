@@ -106,18 +106,25 @@ public class Part : MonoBehaviour
         link_node.maxNumIncomingLinks = can_receive ? (byte)255 : (byte)0;
     }
 
-    public void AddAttachmentPoint(string attachment_name, AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation)
+    public void AddAttachmentPoint(string attachment_name, AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation, Vector3Int size, bool pivot = false)
     {
         GameObject point_grid = new GameObject("PointGrid_"+attachment_name);
         point_grid.transform.parent = game_object.transform;
         
         PartPointGrid part_point_grid = point_grid.AddComponent<PartPointGrid>();
-        part_point_grid.gridUnitSize = new Vector3Int(1, 1, 1);
+        part_point_grid.gridUnitSize = size;
         part_point_grid.Position = position;
         part_point_grid.Orientation = Quaternion.Euler(orientation);
-        part_point_grid.isPivot = true;
+        part_point_grid.isPivot = pivot;
         part_point_grid.alignmentFlags = alignment_flags;
         part_point_grid.attachmentTypes = attachment_flags;
+    }
+
+    public void SetAttachmentSize(string attachment_name, Vector3Int size)
+    {
+        GameObject point_grid = game_object.transform.Find("PointGrid_"+attachment_name).gameObject;
+        PartPointGrid part_point_grid = point_grid.GetComponent<PartPointGrid>();
+        part_point_grid.GridUnitSize = size;
     }
 
     // TODO: THIS FUNCTION IS BUSTED CURRENTLY. DNU
