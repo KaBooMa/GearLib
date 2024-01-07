@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>GearLib</AssemblyName>
     <Description>My first plugin</Description>
-    <Version>0.3.3</Version>
+    <Version>0.3.4</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
     <RestoreAdditionalProjectSources>
@@ -22,6 +22,9 @@
     </Reference>
     <Reference Include="Il2CppSystem.Core">
       <HintPath>lib\Il2CppSystem.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SmashHammer.GearBlocks">
       <HintPath>lib\SmashHammer.GearBlocks.dll</HintPath>

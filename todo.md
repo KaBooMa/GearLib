@@ -6,7 +6,7 @@
 - [x] Provide option to make configurable parts
 - [ ] Provide access to the games default data type links via enum
 - [ ] Add custom GUI options (Shift+E menu) for changing part values as a player
-- [ ] Provide modder direct access to the part properties to modify things such as density, paintable, swappable materials, etc.
+- [x] Provide modder direct access to the part properties to modify things such as density, paintable, swappable materials, etc.
 - [ ] Proper colliders for custom models (Currently only generates Boxcolliders)
 - [ ] Create a GearLib.Unity namespace for users to import into Unity, allowing creation of attachments and various other components directly to their prefab. This will allow easier placement of attachments versus writing it in code
 - [ ] Resizable parts
