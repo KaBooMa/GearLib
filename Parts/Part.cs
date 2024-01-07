@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using GearLib.Behaviours;
 using GearLib.Links;
 using GearLib.Patches;
@@ -18,7 +19,7 @@ public class Part : MonoBehaviour
     public PartDescriptor descriptor;
     public PartPropertiesBase properties;
 
-    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f)
+    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false)
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
         game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
@@ -29,6 +30,21 @@ public class Part : MonoBehaviour
         basic_properties.mass = mass;
         properties = basic_properties;
         game_object.AddComponent<PartPoints>();
+        if (is_paintable)
+        {
+            game_object.AddComponent<PartPaint>();
+            foreach (MeshFilter mesh_filter in game_object.GetComponentsInChildren<MeshFilter>())
+            {
+                mesh_filter.tag = "PaintableMesh";
+            }
+
+            foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
+            {
+                mesh_renderer.material.shader = Shader.Find("GearBlocks/Standard");
+                List<string> shader_keywords = new List<string>() { "_PAINT" };
+                mesh_renderer.material.shaderKeywords = shader_keywords.ToArray();
+            }
+        }
 
         // Destroy any existing colliders that might have been imported
         foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) Destroy(collider);
