@@ -7,6 +7,7 @@ using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using SmashHammer.Core;
 using SmashHammer.GearBlocks.Construction;
+using SmashHammer.GearBlocks.Graphics;
 using SmashHammer.Physics;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartPointGrid;
@@ -17,19 +18,14 @@ public class Part : MonoBehaviour
 {
     public GameObject game_object;
     public PartDescriptor descriptor;
-    public PartPropertiesBase properties;
 
-    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false)
+    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false, bool is_swappable_material = false)
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
         game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
 
         // Create mandatory components for new asset
         descriptor = game_object.AddComponent<PartDescriptor>();
-        PartPropertiesBasic basic_properties = game_object.AddComponent<PartPropertiesBasic>();
-        basic_properties.mass = mass;
-        properties = basic_properties;
-        game_object.AddComponent<PartPoints>();
         if (is_paintable)
         {
             game_object.AddComponent<PartPaint>();
@@ -45,6 +41,19 @@ public class Part : MonoBehaviour
                 mesh_renderer.material.shaderKeywords = shader_keywords.ToArray();
             }
         }
+
+        if (!is_swappable_material)
+        {
+            PartPropertiesBasic properties = game_object.AddComponent<PartPropertiesBasic>();
+            properties.mass = mass;
+        }
+        else
+        {
+            PartPropertiesSwappableMaterial properties = game_object.AddComponent<PartPropertiesSwappableMaterial>();
+            properties.objectMaterialisation = new ObjectMaterialisationAsset();
+        }
+
+        game_object.AddComponent<PartPoints>();
 
         // Destroy any existing colliders that might have been imported
         foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) Destroy(collider);
