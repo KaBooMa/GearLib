@@ -67,7 +67,9 @@ public class BehaviourBase : PartBehaviourActivatableBase
             if (field.IsDefined(typeof(IntField)) || 
                 field.IsDefined(typeof(BooleanField)) || 
                 field.IsDefined(typeof(FloatField)) || 
-                field.IsDefined(typeof(StringField))) 
+                field.IsDefined(typeof(StringField)) ||
+                field.IsDefined(typeof(InputField)) ||
+                field.IsDefined(typeof(JoystickField))) 
                     writer.WritePropertyName(field.Name);
 
             if (field.IsDefined(typeof(IntField))) writer.WriteValue((int)field.GetValue(this));
