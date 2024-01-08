@@ -3,7 +3,7 @@ using System;
 namespace GearLib.Behaviours.Fields;
 
 
-public class FloatField : Attribute, IField
+public class FloatField : IField
 {
     public string label { get; set; } = "MissingLabel";
     public string tooltip_text { get; set; } = "MissingTooltipText";

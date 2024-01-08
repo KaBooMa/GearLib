@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using GearLib.Behaviours.Fields;
+using Newtonsoft.Json;
 using SmashHammer.GearBlocks.Construction;
 using SmashHammer.GearBlocks.Tweakables;
 using SmashHammer.Input;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace GearLib.Behaviours;
 
-public class BehaviourBase : PartBehaviourBase
+public class BehaviourBase : PartBehaviourActivatableBase
 {
     public override string Name { get; }
     public PartDescriptor descriptor { get { return gameObject.GetComponent<PartDescriptor>(); }}
@@ -22,17 +23,70 @@ public class BehaviourBase : PartBehaviourBase
     private GCHandle tweakables_gc;
     private GCHandle dataChanels_gc;
 
-    new void Awake()
-    {
-        base.Awake();
-    }
-
     public BehaviourBase() : base()
     {
-        new JoystickAxis();
         tweakables_gc = GCHandle.Alloc(Tweakables, GCHandleType.Normal);
         dataChanels_gc = GCHandle.Alloc(dataChannels, GCHandleType.Normal);
         ScanForTweakables();
+    }
+    
+    public override void LoadJsonProperty(JsonReader reader, string propertyName)
+    {
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(IField)))) 
+        {
+            if (field.Name != propertyName) continue;
+            TweakableBase tweakable;
+            tweakables_dict.TryGetValue(field.Name, out tweakable);
+            if (field.IsDefined(typeof(IntField)))
+                ((IntTweakable)tweakable).Value = Il2CppSystem.Convert.ToInt32(reader.ReadAsInt32());
+            else if (field.IsDefined(typeof(BooleanField)))
+                ((BooleanTweakable)tweakable).Value = Convert.ToBoolean(reader.ReadAsString());
+            else if (field.IsDefined(typeof(FloatField)))
+                ((FloatTweakable)tweakable).Value = Convert.ToSingle(reader.ReadAsString());
+            else if (field.IsDefined(typeof(StringField)))
+                ((StringTweakable)tweakable).Value = Il2CppSystem.Convert.ToString(reader.ReadAsString());
+            else if (field.IsDefined(typeof(JoystickField)))
+            {
+                JoystickAxis joystick_axis = new JoystickAxis();
+                joystick_axis.Deserialize(reader);
+                ((JoystickAxisTweakable)tweakable).Value = joystick_axis;
+            }
+            else if (field.IsDefined(typeof(InputField)))
+            {
+                InputAction input_action = new InputAction();
+                input_action.Deserialize(reader);
+                ((InputActionTweakable)tweakable).Value = input_action;
+            }
+        }
+    }
+
+    public override void SaveJsonProperties(JsonWriter writer)
+    {
+        foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(IField))))
+        {
+            if (field.IsDefined(typeof(IntField)) || 
+                field.IsDefined(typeof(BooleanField)) || 
+                field.IsDefined(typeof(FloatField)) || 
+                field.IsDefined(typeof(StringField))) 
+                    writer.WritePropertyName(field.Name);
+
+            if (field.IsDefined(typeof(IntField))) writer.WriteValue((int)field.GetValue(this));
+            if (field.IsDefined(typeof(BooleanField))) writer.WriteValue((bool)field.GetValue(this));
+            if (field.IsDefined(typeof(FloatField))) writer.WriteValue((float)field.GetValue(this));
+            if (field.IsDefined(typeof(StringField))) writer.WriteValue((string)field.GetValue(this));
+            if (field.IsDefined(typeof(InputField))) 
+            {
+                InputAction field_data = (InputAction)field.GetValue(this);
+                if (field_data != null)
+                    field_data.Serialize(writer);
+            }
+            if (field.IsDefined(typeof(JoystickField))) 
+            {
+                JoystickAxis field_data = (JoystickAxis)field.GetValue(this);
+                if (field_data != null)
+                    field_data.Serialize(writer);
+            }
+        }
     }
 
     void ScanForTweakables()
@@ -127,21 +181,6 @@ public class BehaviourBase : PartBehaviourBase
         }
     }
 
-    // TODO: Implement or delete
-    // Not working as of now, DNU! Planned to convert to generic for update copy/paste
-    // private void VerifyTweakables<T1, T2>() where T1 : Attribute where T2 : TweakableBase
-    // {
-    //     foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(T1)))) 
-    //     {
-    //         TweakableBase tweakable;
-    //         tweakables_dict.TryGetValue(field.Name, out tweakable);
-    //         Plugin.Log.LogInfo(tweakable.Cast<T2>());
-    //         if (Convert.ToSingle(tweakable.Cast<T2>()) != (float)field.GetValue(this))
-    //         {
-    //             field.SetValue(this, Convert.ToSingle(tweakable.Cast<T2>()));
-    //         }
-    //     }
-    // }
     public List<GameObject> GetLinkedParts(string link_name)
     {
         foreach (PartLinkNode source_node in gameObject.transform.GetComponentsInChildren<PartLinkNode>())

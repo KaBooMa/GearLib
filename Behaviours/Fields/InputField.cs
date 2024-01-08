@@ -3,7 +3,7 @@ using SmashHammer.Input;
 
 namespace GearLib.Behaviours.Fields;
 
-public class InputField : Attribute, IField
+public class InputField : IField
 {
 
     public string label { get; set; } = "MissingLabel";

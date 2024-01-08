@@ -2,7 +2,7 @@ using System;
 
 namespace GearLib.Behaviours.Fields;
 
-public class IntField : Attribute, IField
+public class IntField : IField
 {
     public string label { get; set; } = "MissingLabel";
     public string tooltip_text { get; set; } = "MissingTooltipText";
