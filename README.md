@@ -9,6 +9,11 @@ Adds in combustion motor parts for building your own engines!\
 https://github.com/KaBooMa/CombustionMotors\
 ![Alt Text](imgs/spotlights/combustionmotors.png)
 
+### Angled Parts
+Adds in angled parts to help avoid node skipping!\
+https://github.com/KaBooMa/AngledParts\
+![Alt Text](imgs/spotlights/angledparts.png)
+
 ## Installation (Player)
 - Install BepInEx 6 into your GearBlocks folder **(Currently confirmed working version is BE release #679, IL2CPP-win-x86. You can download that here: https://builds.bepinex.dev/projects/bepinex_be)**
 - Install GearLib into your new BepInEx/plugins folder.
