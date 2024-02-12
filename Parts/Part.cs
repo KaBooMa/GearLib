@@ -76,6 +76,10 @@ public class Part : MonoBehaviour
         default_layer.name = "Default";
         default_layer.index = 0;
 
+        LayerAsset no_collide_layer = ScriptableObject.CreateInstance<LayerAsset>();
+        no_collide_layer.name = "NoDefaultCollide";
+        no_collide_layer.index = 6;
+
         LayerAsset dematerialising_layer = ScriptableObject.CreateInstance<LayerAsset>();
         dematerialising_layer.name = "Dematerialising";
         dematerialising_layer.index = 29;
@@ -95,6 +99,11 @@ public class Part : MonoBehaviour
         LayerMaskAsset intersection_layer_mask = ScriptableObject.CreateInstance<LayerMaskAsset>();
         intersection_layer_mask.layers.AddItem(selected_layer);
         intersection_layer_mask.layers.AddItem(frozen_layer);
+
+        // Setup part physics
+        PartPhysics part_physics = game_object.GetComponent<PartPhysics>();
+        part_physics.defaultLayer = default_layer;
+        part_physics.noDefaultCollideLayer = no_collide_layer;
 
         // Setup default variables for new components
         descriptor.displayName = display_name;
