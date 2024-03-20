@@ -1,11 +1,12 @@
 using System;
 using SmashHammer.Input;
 
-namespace GearLib.Behaviours.Fields;
+namespace GearLib.API.Fields;
 
-public class JoystickField : IField
+public class InputField : IField
 {
+
     public string label { get; set; } = "MissingLabel";
     public string tooltip_text { get; set; } = "MissingTooltipText";
-    public JoystickAxis initial_value { get; set; } = new JoystickAxis();
+    public InputAction initial_value { get; set; } = new InputAction();
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
-using GearLib.Behaviours;
-using GearLib.Links;
+using GearLib.API;
 using GearLib.Patches;
 using GearLib.Utils;
 using HarmonyLib;
@@ -12,7 +11,7 @@ using SmashHammer.Physics;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartPointGrid;
 
-namespace GearLib.Parts;
+namespace GearLib.API;
 
 public class Part : MonoBehaviour
 {
@@ -113,7 +112,7 @@ public class Part : MonoBehaviour
         descriptor.highlightingLayer = highlighting_layer;
         descriptor.intersectionLayerMask = intersection_layer_mask;
 
-        PartsDatabase.Add(part_uid, game_object);
+        PartsDatabase.QueuePart(part_uid, game_object);
     }
 
     public T AddBehaviour<T>() where T : BehaviourBase

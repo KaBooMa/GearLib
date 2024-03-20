@@ -10,6 +10,7 @@ namespace GearLib.Patches;
 class PartsDatabase : MonoBehaviour
 {
     private static Dictionary<ulong, GameObject> new_parts = new Dictionary<ulong, GameObject>();
+    private static Dictionary<ulong, GameObject> new_materials = new Dictionary<ulong, GameObject>();
 
     // Patches the database load to load modded parts AFTER game parts are loaded
     private static void Postfix(PartDatabaseAsset __instance)
@@ -31,9 +32,14 @@ class PartsDatabase : MonoBehaviour
         }
     }
 
-    // Adds a part to the queue. Part is not added to the database until the database loads its assets
-    public static void Add(ulong part_uid, GameObject asset)
+    // Adds mod items to the queue. Items is not added to the database until the database loads its assets
+    public static void QueuePart(ulong part_uid, GameObject asset)
     {
         new_parts.Add(part_uid, asset);
+    }
+    
+    public static void QueueMaterial(ulong material_uid, GameObject asset)
+    {
+        new_materials.Add(material_uid, asset);
     }
 }

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using GearLib.Behaviours.Fields;
+using GearLib.API.Fields;
 using Newtonsoft.Json;
 using SmashHammer.GearBlocks.Construction;
 using SmashHammer.GearBlocks.Tweakables;
 using SmashHammer.Input;
 using UnityEngine;
 
-namespace GearLib.Behaviours;
+namespace GearLib.API;
 
 public class BehaviourBase : PartBehaviourActivatableBase
 {
