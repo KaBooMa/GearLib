@@ -2,6 +2,9 @@ using System;
 
 namespace GearLib.API.Fields;
 
+/// <summary>
+/// A Boolean property for your Behaviour.
+/// </summary>
 public class BooleanField : IField
 {
     public string label { get; set; } = "MissingLabel";

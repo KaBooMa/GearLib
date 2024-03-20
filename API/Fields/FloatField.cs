@@ -2,7 +2,9 @@ using System;
 
 namespace GearLib.API.Fields;
 
-
+/// <summary>
+/// A Float property for your Behaviour.
+/// </summary>
 public class FloatField : IField
 {
     public string label { get; set; } = "MissingLabel";

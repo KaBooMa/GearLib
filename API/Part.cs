@@ -13,11 +13,38 @@ using static SmashHammer.GearBlocks.Construction.PartPointGrid;
 
 namespace GearLib.API;
 
+/// <summary>
+/// Base class to use when creating a new Part.   <br/><br/>
+/// These can be created using:  <br/>
+/// Part new_part = new Part(args);  <br/><br/>
+/// or by inheriting like so:  <br/>
+/// class NewPart : Part  <br/>
+/// {  <br/>
+///   public NewPart() : base(args)  <br/>
+///   {  <br/>
+///       // Your code here  <br/>
+///   }  <br/>
+/// }  <br/>
+/// </summary>
 public class Part : MonoBehaviour
 {
     public GameObject game_object;
     public PartDescriptor descriptor;
 
+    /// <summary>
+    /// Creates a new Part within the game. No attachment points will be available unless specified.
+    /// </summary>
+    /// <param name="bundle_path">Path to the bundle within your mod folder. For example "CombustionMotors/assets/my_asset_bundle"</param>
+    /// <param name="asset_name">The name of your asset within the bundle.</param>
+    /// <param name="part_uid">Unique ID for your part. This must be unique even across other mods, so randomize a big number!</param>
+    /// <param name="display_name">The name that will be used when players interact with it in game.</param>
+    /// <param name="category">String ID representation of the category you want it listed in. Default categories in game are: (Area, Blocks, Bodies, Brakes & Clutches, Checkpoints, Connectors, Control Wheels, Electronics, Gears, Lights, Linear Actuators, Motors, Power, Props, Pulleys, Seats, Suspension, Wheels)</param>
+    /// <param name="mass">Weight of your part</param>
+    /// <param name="is_paintable">Determines if the part is paintable. Default is false</param>
+    /// <param name="is_swappable_material">Determines if the part material can be changed. Default is false</param>
+    /// <returns>
+    /// Returns your new Part object. Further methods can be called for adding attachments, links, etc.
+    /// </returns>
     public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false, bool is_swappable_material = false)
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
@@ -115,13 +142,28 @@ public class Part : MonoBehaviour
         PartsDatabase.QueuePart(part_uid, game_object);
     }
 
-    public T AddBehaviour<T>() where T : BehaviourBase
+    /// <summary>
+    /// Adds a Behaviour to your Part. Behaviours are logic that runs on your part. A part can have multiple Behaviours.
+    /// </summary>
+    /// <param name="T">T Represents your Behaviour class with all it's logic.</param>
+    /// <returns>
+    /// Returns your instanced Behaviour object on the Part.
+    /// </returns>
+    public T AddBehaviour<T>() where T : Behaviour
     {
         ClassInjector.RegisterTypeInIl2Cpp<T>();
         T behaviour = game_object.AddComponent<T>();
         return behaviour;
     }
 
+    /// <summary>
+    /// Adds a Link Point to your Part. This allows players to connect Parts together for logic.
+    /// </summary>
+    /// <param name="name">The name of your Link Point. This is just a unique name for you to utilize in your Behaviours.</param>
+    /// <param name="link_type">Unique string ID of the link type you'll be using.</param>
+    /// <param name="position">The position in 3D space to place your link point.</param>
+    /// <param name="can_send">Determines if you can send data from this link. Default is true</param>
+    /// <param name="can_receive">Determines if you can receive data from this link. Default is true</param>
     public void AddLinkPoint(string name, string link_type, Vector3 position, bool can_send = true, bool can_receive = true)
     {
         PartLinkTypeAsset asset;
@@ -139,6 +181,16 @@ public class Part : MonoBehaviour
         link_node.maxNumIncomingLinks = can_receive ? (byte)255 : (byte)0;
     }
 
+    /// <summary>
+    /// Adds an Attachment Point to your Part. This allows players to attach it to things or things to it.
+    /// </summary>
+    /// <param name="attachment_name">The name of your Attachment Point. This is just a unique name for you to utilize in your Behaviours.</param>
+    /// <param name="attachment_flags">Class from the base game. This determines what style attachment you'll have, for example, knuckle joints, spherical, fixed, etc.</param>
+    /// <param name="alignment_flags">Class from the base game. This determines the alignment required for your attachment, for example, bi-directional, only 90 degrees, only 180, etc.</param>
+    /// <param name="position">Unit position on your part this attachment will be added.</param>
+    /// <param name="orientation">The unit direction your attachment will face, so to speak.</param>
+    /// <param name="size">The size in units your attachment will be.</param>
+    /// <param name="pivot">Determines if other parts can attach to your part, or only your part can attach to them. Default is false</param>
     public void AddAttachmentPoint(string attachment_name, AttachmentTypeFlags attachment_flags, AlignmentFlags alignment_flags, Vector3 position, Vector3 orientation, Vector3Int size, bool pivot = false)
     {
         GameObject point_grid = new GameObject("PointGrid_"+attachment_name);
@@ -153,6 +205,11 @@ public class Part : MonoBehaviour
         part_point_grid.attachmentTypes = attachment_flags;
     }
 
+    /// <summary>
+    /// Allows you to alter the unit size of your attachments on the Part.
+    /// </summary>
+    /// <param name="attachment_name">The name of your Attachment Point.</param>
+    /// <param name="size">The size in units your attachment will be.</param>
     public void SetAttachmentSize(string attachment_name, Vector3Int size)
     {
         GameObject point_grid = game_object.transform.Find("PointGrid_"+attachment_name).gameObject;

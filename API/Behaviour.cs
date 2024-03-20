@@ -12,7 +12,10 @@ using UnityEngine;
 
 namespace GearLib.API;
 
-public class BehaviourBase : PartBehaviourActivatableBase
+/// <summary>
+/// Base class for a Behaviour to attach to your Part. Ideal usage is inheriting from this class (public class MyBehaviour : Behaviour {})
+/// </summary>
+public class Behaviour : PartBehaviourActivatableBase
 {
     public override string Name { get; }
     public PartDescriptor descriptor { get { return gameObject.GetComponent<PartDescriptor>(); }}
@@ -23,13 +26,17 @@ public class BehaviourBase : PartBehaviourActivatableBase
     private GCHandle tweakables_gc;
     private GCHandle dataChanels_gc;
 
-    public BehaviourBase() : base()
+    public Behaviour() : base()
     {
         tweakables_gc = GCHandle.Alloc(Tweakables, GCHandleType.Normal);
         dataChanels_gc = GCHandle.Alloc(dataChannels, GCHandleType.Normal);
         ScanForTweakables();
     }
     
+    /// <summary>
+    /// !! NOT FOR MODDER USE !!<br/>
+    /// Used by GearBlocks for loading your Part properties.
+    /// </summary>
     public override void LoadJsonProperty(JsonReader reader, string propertyName)
     {
         foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(IField)))) 
@@ -60,6 +67,10 @@ public class BehaviourBase : PartBehaviourActivatableBase
         }
     }
 
+    /// <summary>
+    /// !! NOT FOR MODDER USE !!<br/>
+    /// Used by GearBlocks for saving your Part properties.
+    /// </summary>
     public override void SaveJsonProperties(JsonWriter writer)
     {
         foreach (FieldInfo field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance).Where(fi => fi.IsDefined(typeof(IField))))
@@ -183,6 +194,11 @@ public class BehaviourBase : PartBehaviourActivatableBase
         }
     }
 
+    /// <summary>
+    /// Gets a list of all Parts linked to the Link Type.
+    /// </summary>
+    /// <param name="link_name">Unique string ID of the Link Type.</param>
+    /// <returns>List of Parts</returns>
     public List<GameObject> GetLinkedParts(string link_name)
     {
         foreach (PartLinkNode source_node in gameObject.transform.GetComponentsInChildren<PartLinkNode>())
@@ -202,6 +218,11 @@ public class BehaviourBase : PartBehaviourActivatableBase
         return null;
     }
 
+    /// <summary>
+    /// Gets a specific attachment by Attachment Name
+    /// </summary>
+    /// <param name="attachment_name">Unique string ID of the attachment.</param>
+    /// <returns></returns>
     public AttachmentBase GetAttachment(string attachment_name)
     {
         foreach (AttachmentBase attachment in descriptor.Attachments.associatedAttachments)

@@ -2,6 +2,9 @@ using System;
 
 namespace GearLib.API.Fields;
 
+/// <summary>
+/// A String property for your Behaviour.
+/// </summary>
 public class StringField : IField
 {
     public string label { get; set; } = "MissingLabel";
