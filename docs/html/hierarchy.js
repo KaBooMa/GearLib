@@ -11,6 +11,7 @@ var hierarchy =
       ] ]
     ] ],
     [ "GearLib.API.LinkType", "class_gear_lib_1_1_a_p_i_1_1_link_type.html", null ],
+    [ "GearLib.API.Material", "class_gear_lib_1_1_a_p_i_1_1_material.html", null ],
     [ "MonoBehaviour", null, [
       [ "GearLib.API.Part", "class_gear_lib_1_1_a_p_i_1_1_part.html", null ]
     ] ],
