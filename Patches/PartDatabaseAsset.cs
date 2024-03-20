@@ -3,6 +3,7 @@ using HarmonyLib;
 using SmashHammer.GearBlocks.Construction;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartDatabaseAsset;
+using Material = GearLib.API.Material;
 
 namespace GearLib.Patches;
 
@@ -10,7 +11,7 @@ namespace GearLib.Patches;
 class PartsDatabase : MonoBehaviour
 {
     private static Dictionary<ulong, GameObject> new_parts = new Dictionary<ulong, GameObject>();
-    private static Dictionary<ulong, GameObject> new_materials = new Dictionary<ulong, GameObject>();
+    private static Dictionary<ulong, PartMaterialAsset> new_materials = new Dictionary<ulong, PartMaterialAsset>();
 
     // Patches the database load to load modded parts AFTER game parts are loaded
     private static void Postfix(PartDatabaseAsset __instance)
@@ -30,6 +31,12 @@ class PartsDatabase : MonoBehaviour
             PartEntry new_entry = new PartEntry(part.Value);
             __instance.parts.TryAdd(part.Key, new_entry);
         }
+
+        foreach (KeyValuePair<ulong, PartMaterialAsset> mat in new_materials)
+        {
+            MaterialEntry mat_entry = new MaterialEntry(mat.Value);
+            __instance.materials.TryAdd(mat.Key, mat_entry);
+        }
     }
 
     // Adds mod items to the queue. Items is not added to the database until the database loads its assets
@@ -38,8 +45,8 @@ class PartsDatabase : MonoBehaviour
         new_parts.Add(part_uid, asset);
     }
     
-    public static void QueueMaterial(ulong material_uid, GameObject asset)
+    public static void QueueMaterial(ulong material_uid, PartMaterialAsset material)
     {
-        new_materials.Add(material_uid, asset);
+        new_materials.Add(material_uid, material);
     }
 }

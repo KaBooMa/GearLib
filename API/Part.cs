@@ -48,7 +48,7 @@ public class Part : MonoBehaviour
     public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false, bool is_swappable_material = false)
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
-        game_object = LoaderUtil.LoadAsset(bundle_path, asset_name);
+        game_object = LoaderUtil.LoadObject(bundle_path, asset_name);
 
         // Create mandatory components for new asset
         descriptor = game_object.AddComponent<PartDescriptor>();
