@@ -76,6 +76,8 @@ You'll need to install Unity version 2021.3.33f1 specifically to create your Ass
 ## Modding Guidance
 Reach out in the official Discord to KaBooMa for guidance at this time. See the spotlighted mods for examples!
 
+Now available is a DoxyGen page! https://kabooma.github.io/GearLib/
+
 ### Quick Guidance
 - Unity Explorer can really help you see what is going on in the game. The working version of UE is located here: https://github.com/sinai-dev/UnityExplorer/releases/latest/download/UnityExplorer.BepInEx.IL2CPP.CoreCLR.zip
 - GearLib.Parts contains a Part class that can be used to create new parts within the game. `Part my_custom_part  = new Part("MyPluginFolder/assets/my_custom_prefab", "PrefabNameInUnity", 1234, "My Custom Parts Name", "Props");`
