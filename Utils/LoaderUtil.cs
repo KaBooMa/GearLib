@@ -9,7 +9,12 @@ namespace GearLib.Utils;
 class LoaderUtil
 {
     private static Dictionary<string, AssetBundle> loaded_bundles = new Dictionary<string, AssetBundle>();
-    
+
+    public static Mesh LoadMeshFromOBJ(string asset_path, string asset_name) {
+        string obj_path = Path.Combine(Paths.PluginPath, asset_path, $"{asset_name}.obj");
+        return ObjParser.ParseObj(obj_path);
+    }
+
     public static AssetBundle GetAssetBundle(string bundle_path, string asset_name)
     {        
         AssetBundle bundle;

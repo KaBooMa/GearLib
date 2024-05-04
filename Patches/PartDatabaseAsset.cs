@@ -3,7 +3,6 @@ using HarmonyLib;
 using SmashHammer.GearBlocks.Construction;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartDatabaseAsset;
-using Material = GearLib.API.Material;
 
 namespace GearLib.Patches;
 
@@ -15,10 +14,10 @@ class PartsDatabase : MonoBehaviour
 
     // Patches the database load to load modded parts AFTER game parts are loaded
     private static void Postfix(PartDatabaseAsset __instance)
-    {
+    {        
         GameObject donor_beam_part = __instance.parts[6532399048539789867].partPrefab;
         PartPropertiesSwappableMaterial donor_beam_swappable = donor_beam_part.GetComponent<PartPropertiesSwappableMaterial>();
-
+    
         foreach (KeyValuePair<ulong, GameObject> part in new_parts)
         {
             PartPropertiesSwappableMaterial swappable_material = part.Value.GetComponent<PartPropertiesSwappableMaterial>();
@@ -29,6 +28,9 @@ class PartsDatabase : MonoBehaviour
             }
 
             PartEntry new_entry = new PartEntry(part.Value);
+            part.Value.transform.SetParent(null, false);
+            GameObject.DontDestroyOnLoad(part.Value);
+            GameObject.Destroy(part.Value.GetComponentInChildren<BoxCollider>());
             __instance.parts.TryAdd(part.Key, new_entry);
         }
 

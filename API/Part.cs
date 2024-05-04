@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using GearLib.API;
 using GearLib.Patches;
 using GearLib.Utils;
 using HarmonyLib;
@@ -26,10 +26,14 @@ namespace GearLib.API;
 ///   }  <br/>
 /// }  <br/>
 /// </summary>
-public class Part : MonoBehaviour
+public class Part
 {
     public GameObject game_object;
     public PartDescriptor descriptor;
+
+    // This cube is loaded from a bundle and will be replaced as new parts are generated
+    // This is a HACK used to avoid GC on the GameObject...
+    public static GameObject loading_object = LoaderUtil.LoadObject("GearLib/gearlib", "Cube");
 
     /// <summary>
     /// Creates a new Part within the game. No attachment points will be available unless specified.
@@ -45,10 +49,31 @@ public class Part : MonoBehaviour
     /// <returns>
     /// Returns your new Part object. Further methods can be called for adding attachments, links, etc.
     /// </returns>
-    public Part(string bundle_path, string asset_name, ulong part_uid, string display_name, string category, float mass = 1f, bool is_paintable = false, bool is_swappable_material = false)
+    public Part(ulong part_uid, string display_name, string category, float mass = 1f, string bundle_path = null, string asset_name = null, string asset_path = null, bool is_paintable = false, bool is_swappable_material = false)
     {
-        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{asset_name}]");
-        game_object = LoaderUtil.LoadObject(bundle_path, asset_name);
+        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{display_name}]");
+
+        if (bundle_path != null) 
+        {
+            game_object = LoaderUtil.LoadObject(bundle_path, asset_name);
+        } 
+        else if (asset_path != null) 
+        {
+            // Create our new game object w/ parent for hack
+            game_object = new GameObject(display_name);
+            game_object.transform.SetParent(loading_object.transform);
+
+            // Generate a child for mesh data
+            GameObject model = new GameObject("Model");
+            model.transform.SetParent(game_object.transform);
+            MeshFilter new_mesh_filter = model.AddComponent<MeshFilter>();
+            new_mesh_filter.mesh = LoaderUtil.LoadMeshFromOBJ(asset_path, asset_name);
+            model.AddComponent<MeshRenderer>();
+        } 
+        else 
+        {
+            throw new Exception($"{display_name} doesn't have a asset_name or bundle_path specified!");
+        }
 
         // Create mandatory components for new asset
         descriptor = game_object.AddComponent<PartDescriptor>();
@@ -82,10 +107,10 @@ public class Part : MonoBehaviour
         game_object.AddComponent<PartPoints>();
 
         // Destroy any existing colliders that might have been imported
-        foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) Destroy(collider);
-        foreach (BoxCollider collider in game_object.GetComponentsInChildren<BoxCollider>()) Destroy(collider);
-        foreach (SphereCollider collider in game_object.GetComponentsInChildren<SphereCollider>()) Destroy(collider);
-        foreach (CapsuleCollider collider in game_object.GetComponentsInChildren<CapsuleCollider>()) Destroy(collider);
+        foreach (MeshCollider collider in game_object.GetComponentsInChildren<MeshCollider>()) GameObject.Destroy(collider);
+        foreach (BoxCollider collider in game_object.GetComponentsInChildren<BoxCollider>()) GameObject.Destroy(collider);
+        foreach (SphereCollider collider in game_object.GetComponentsInChildren<SphereCollider>()) GameObject.Destroy(collider);
+        foreach (CapsuleCollider collider in game_object.GetComponentsInChildren<CapsuleCollider>()) GameObject.Destroy(collider);
         
         // For each mesh we want to add a new box collider
         foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
