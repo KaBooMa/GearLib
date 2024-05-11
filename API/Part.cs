@@ -49,7 +49,7 @@ public class Part
     /// <returns>
     /// Returns your new Part object. Further methods can be called for adding attachments, links, etc.
     /// </returns>
-    public Part(ulong part_uid, string display_name, string category, float mass = 1f, string bundle_path = null, string asset_name = null, string asset_path = null, bool is_paintable = false, bool is_swappable_material = false)
+    public Part(ulong part_uid, string display_name, string category, float mass = 1f, string bundle_path = null, string asset_name = null, string asset_path = null, string asset = null, bool is_paintable = false, bool is_swappable_material = false)
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{display_name}]");
 
@@ -57,7 +57,7 @@ public class Part
         {
             game_object = LoaderUtil.LoadObject(bundle_path, asset_name);
         } 
-        else if (asset_path != null) 
+        else if (asset_path != null || asset != null) 
         {
             // Create our new game object w/ parent for hack
             game_object = new GameObject(display_name);
@@ -67,7 +67,14 @@ public class Part
             GameObject model = new GameObject("Model");
             model.transform.SetParent(game_object.transform);
             MeshFilter new_mesh_filter = model.AddComponent<MeshFilter>();
-            new_mesh_filter.mesh = LoaderUtil.LoadMeshFromOBJ(asset_path, asset_name);
+            if (asset != null)
+            {
+                new_mesh_filter.mesh = LoaderUtil.LoadMeshFromOBJData(asset.Split("\n"));
+            }
+            else 
+            {
+                new_mesh_filter.mesh = LoaderUtil.LoadMeshFromOBJ(asset_path, asset_name);
+            }
             model.AddComponent<MeshRenderer>();
         } 
         else 
