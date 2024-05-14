@@ -49,7 +49,19 @@ public class Part
     /// <returns>
     /// Returns your new Part object. Further methods can be called for adding attachments, links, etc.
     /// </returns>
-    public Part(ulong part_uid, string display_name, string category, float mass = 1f, string bundle_path = null, string asset_name = null, string asset_path = null, string asset = null, bool is_paintable = false, bool is_swappable_material = false)
+    public Part(
+        ulong part_uid, 
+        string display_name, 
+        string category, 
+        float mass = 1f, 
+        string bundle_path = null, 
+        string asset_name = null, 
+        string asset_path = null, 
+        string asset = null, 
+        bool is_paintable = false, 
+        bool is_swappable_material = false, 
+        bool mesh_collider = false
+    )
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{display_name}]");
 
@@ -75,6 +87,7 @@ public class Part
             {
                 new_mesh_filter.mesh = LoaderUtil.LoadMeshFromOBJ(asset_path, asset_name);
             }
+
             model.AddComponent<MeshRenderer>();
         } 
         else 
@@ -119,16 +132,6 @@ public class Part
         foreach (SphereCollider collider in game_object.GetComponentsInChildren<SphereCollider>()) GameObject.Destroy(collider);
         foreach (CapsuleCollider collider in game_object.GetComponentsInChildren<CapsuleCollider>()) GameObject.Destroy(collider);
         
-        // For each mesh we want to add a new box collider
-        foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
-        {
-            GameObject collider = new GameObject("Collider");
-            collider.transform.SetParent(game_object.transform);
-            BoxCollisionVolume volume = collider.AddComponent<BoxCollisionVolume>();
-            volume.size = mesh_renderer.bounds.size;
-            volume.center = mesh_renderer.bounds.center;
-        }
-
         // Setup layers
         LayerAsset default_layer = ScriptableObject.CreateInstance<LayerAsset>();
         default_layer.name = "Default";
@@ -162,6 +165,25 @@ public class Part
         PartPhysics part_physics = game_object.GetComponent<PartPhysics>();
         part_physics.defaultLayer = default_layer;
         part_physics.noDefaultCollideLayer = no_collide_layer;
+        part_physics.InitCollisionVolumes();
+        part_physics.InitMassProperties(1);
+
+        // For each mesh we want to add a new box collider
+        foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
+        {
+            GameObject collider = new GameObject("Collider");
+            collider.transform.SetParent(game_object.transform);
+            if (mesh_collider)
+            {
+                MeshCollisionVolume volume = collider.AddComponent<MeshCollisionVolume>();
+            }
+            else
+            {
+                BoxCollisionVolume volume = collider.AddComponent<BoxCollisionVolume>();
+                volume.size = mesh_renderer.bounds.size;
+                volume.center = mesh_renderer.bounds.center;
+            }
+        }
 
         // Setup default variables for new components
         descriptor.displayName = display_name;
