@@ -165,8 +165,6 @@ public class Part
         PartPhysics part_physics = game_object.GetComponent<PartPhysics>();
         part_physics.defaultLayer = default_layer;
         part_physics.noDefaultCollideLayer = no_collide_layer;
-        part_physics.InitCollisionVolumes();
-        part_physics.InitMassProperties(1);
 
         // For each mesh we want to add a new box collider
         foreach (MeshRenderer mesh_renderer in game_object.GetComponentsInChildren<MeshRenderer>())
@@ -175,7 +173,12 @@ public class Part
             collider.transform.SetParent(game_object.transform);
             if (mesh_collider)
             {
-                MeshCollisionVolume volume = collider.AddComponent<MeshCollisionVolume>();
+                collider.AddComponent<MeshCollisionVolume>();
+                game_object.AddComponent<MeshCollisionBehaviour>();
+
+                // Disable all behaviours til cloned
+                foreach (MonoBehaviour behaviour in game_object.GetComponentsInChildren<MonoBehaviour>())
+                    behaviour.enabled = false;
             }
             else
             {

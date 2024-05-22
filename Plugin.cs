@@ -6,6 +6,7 @@ using GearLib.Patches;
 using HarmonyLib;
 using Il2CppInterop.Runtime.Injection;
 using SmashHammer.GearBlocks.Construction;
+using UnityEngine;
 
 namespace GearLib;
 
@@ -20,6 +21,8 @@ public class Plugin : BasePlugin
         Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
         ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionVolume>();
+        ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionBehaviour>();
+
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }
 }
