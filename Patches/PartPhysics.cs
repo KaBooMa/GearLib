@@ -1,4 +1,4 @@
-using GearLib.API;
+using GearLib.Classes;
 using HarmonyLib;
 using SmashHammer.GearBlocks.Construction;
 using SmashHammer.Physics;

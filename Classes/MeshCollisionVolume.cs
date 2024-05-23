@@ -5,7 +5,7 @@ using SmashHammer.GearBlocks.Construction;
 using SmashHammer.Physics;
 using UnityEngine;
 
-namespace GearLib.API;
+namespace GearLib.Classes;
 
 class MeshCollisionVolume : CollisionVolumeBase
 {
@@ -13,6 +13,11 @@ class MeshCollisionVolume : CollisionVolumeBase
     PartDescriptor descriptor;
     MeshCollider mesh_collider_concave;
 
+    static MeshCollisionVolume()
+    {
+        ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionVolume>();
+    }
+    
     public MeshCollisionVolume(IntPtr ptr) : base(ptr) { }
     public MeshCollisionVolume() : base(ClassInjector.DerivedConstructorPointer<MeshCollisionVolume>())
     {

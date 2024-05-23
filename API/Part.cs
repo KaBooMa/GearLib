@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GearLib.Classes;
 using GearLib.Patches;
 using GearLib.Utils;
 using HarmonyLib;

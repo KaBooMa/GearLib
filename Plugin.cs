@@ -1,12 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
-using GearLib.API;
-using GearLib.Patches;
+using GearLib.Utils;
 using HarmonyLib;
-using Il2CppInterop.Runtime.Injection;
-using SmashHammer.GearBlocks.Construction;
-using UnityEngine;
 
 namespace GearLib;
 
@@ -20,8 +16,8 @@ public class Plugin : BasePlugin
         Log = base.Log;
         Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
-        ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionVolume>();
-        ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionBehaviour>();
+
+        GearthonLoader.LoadMods();
 
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }

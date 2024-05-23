@@ -1,12 +1,18 @@
+using Il2CppInterop.Runtime.Injection;
 using SmashHammer.GearBlocks.Construction;
 using UnityEngine;
 
-namespace GearLib.API;
+namespace GearLib.Classes;
 
 class MeshCollisionBehaviour : MonoBehaviour
 {
     bool is_frozen = false;
     PartDescriptor descriptor;
+
+    static MeshCollisionBehaviour()
+    {
+        ClassInjector.RegisterTypeInIl2Cpp<MeshCollisionBehaviour>();
+    }
     
     public void Awake()
     {
