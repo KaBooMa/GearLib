@@ -61,8 +61,11 @@ public class ObjParser
                 Vector3 unity_normal = normals[Convert.ToInt32(ds[2])-1];
                 unity_normals.Add(unity_normal);
 
-                Vector2 unity_uv = uvs[Convert.ToInt32(ds[1])-1];
-                unity_uvs.Add(unity_uv);
+                if (ds[1] != "")
+                {
+                    Vector2 unity_uv = uvs[Convert.ToInt32(ds[1])-1];
+                    unity_uvs.Add(unity_uv);
+                }
 
                 unity_faces.Add(unity_vertices.Count-1);
             }
