@@ -260,6 +260,11 @@ public class Part
         part_point_grid.isPivot = pivot;
         part_point_grid.alignmentFlags = alignment_flags;
         part_point_grid.attachmentTypes = attachment_flags;
+
+        if (attachment_flags.HasFlag(AttachmentTypeFlags.SphericalBearing))
+        {
+            game_object.AddComponent<BallAndSocketBehaviour>();
+        }
     }
 
     /// <summary>
