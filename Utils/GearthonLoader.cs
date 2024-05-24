@@ -19,18 +19,51 @@ class GearthonLoader
     public static Dictionary<ulong, JArray> tweakables = new Dictionary<ulong, JArray>();
     private static string MODS_FOLDER = Path.Combine(Paths.PluginPath, "Gearthon", "mods");
     
-    public static void LoadMods()
+    static Dictionary<string, JObject> GetMods()
     {
         // No mods folder exists
         if (!Directory.Exists(MODS_FOLDER))
-            return;
+            return null;
 
-        // Load custom parts
+        Dictionary<string, JObject> mods = new Dictionary<string, JObject>();
         foreach (string mod_folder_name in Directory.GetDirectories(MODS_FOLDER))
         {
             string mod_folder = Path.Combine(MODS_FOLDER, mod_folder_name);
             string content = File.ReadAllText(Path.Combine(mod_folder, "mod.json"));
             JObject mod = JObject.Parse(content);
+            mods.Add(mod_folder, mod);
+        }
+
+        return mods;
+    }
+
+    public static void LoadLinkTypes()
+    {
+        foreach (KeyValuePair<string, JObject> pair in GetMods())
+        {
+            string mod_folder = pair.Key;
+            JObject mod = pair.Value;
+            JArray link_types = mod["link_types"].Cast<JArray>();
+
+            for (int i = 0; i < link_types.Count; i++)
+            {
+                JToken link_type_data = link_types[i].Cast<JToken>();
+                string name = (string)link_type_data["name"];
+                string display_name = (string)link_type_data["display_name"];
+                JToken color_data = link_type_data["color"].Cast<JToken>();
+                Color color = new Color((float)color_data["r"], (float)color_data["g"], (float)color_data["b"]);
+                new LinkType(name, color);
+            }
+        }
+    }
+
+    public static void LoadParts()
+    {
+        // Load custom parts
+        foreach (KeyValuePair<string, JObject> pair in GetMods())
+        {
+            string mod_folder = pair.Key;
+            JObject mod = pair.Value;
             JArray parts = mod["parts"].Cast<JArray>();
 
             for (int i = 0; i < parts.Count; i++)
@@ -92,8 +125,6 @@ class GearthonLoader
                 }
             }
         }
-        
-        Plugin.Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }
 
     static AttachmentTypeFlags JTokenToTypeFlags(JArray token)

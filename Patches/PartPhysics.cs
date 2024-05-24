@@ -7,7 +7,7 @@ using UnityEngine;
 namespace GearLib.Patches;
 
 [HarmonyPatch(typeof(PartPhysics), nameof(PartPhysics.InitMassProperties))]
-class PartPhysics_Patch
+class PartPhysicsPatch
 {
     static void Postfix(PartPhysics __instance, float mass)
     {

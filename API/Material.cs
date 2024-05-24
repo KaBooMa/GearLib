@@ -9,6 +9,7 @@ public class Material
 {
     public Material(ulong material_uid, string bundle_path, string asset_name, string display_name, float density, float strength, float bounciness, float dynamic_friction, float static_friction, bool is_paintable = true) 
     {
+        Plugin.Log.LogInfo($"{GetType().Name}: Adding custom material [{display_name}]");
         UnityEngine.Material material = LoaderUtil.LoadMaterial(bundle_path, asset_name);
 
         PartMaterialAsset material_asset = new PartMaterialAsset();
@@ -24,6 +25,6 @@ public class Material
 
         material_asset.physicsMaterial = physic_material;
         
-        PartsDatabase.QueueMaterial(material_uid, material_asset);
+        PartDatabaseAssetPatch.QueueMaterial(material_uid, material_asset);
     }
 }

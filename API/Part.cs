@@ -8,6 +8,7 @@ using Il2CppInterop.Runtime.Injection;
 using SmashHammer.Core;
 using SmashHammer.GearBlocks.Construction;
 using SmashHammer.GearBlocks.Graphics;
+using SmashHammer.GearBlocks.UI;
 using SmashHammer.Physics;
 using UnityEngine;
 using static SmashHammer.GearBlocks.Construction.PartPointGrid;
@@ -197,7 +198,7 @@ public class Part
         descriptor.highlightingLayer = highlighting_layer;
         descriptor.intersectionLayerMask = intersection_layer_mask;
 
-        PartsDatabase.QueuePart(part_uid, game_object);
+        PartDatabaseAssetPatch.QueuePart(part_uid, game_object);
     }
 
     /// <summary>
@@ -224,8 +225,14 @@ public class Part
     /// <param name="can_receive">Determines if you can receive data from this link. Default is true</param>
     public void AddLinkPoint(string name, string link_type, Vector3 position, bool can_send = true, bool can_receive = true)
     {
-        PartLinkTypeAsset asset;
-        LinkType.link_types.TryGetValue(link_type, out asset);
+        PartLinkTypeAsset asset = null;
+        LinkerToolGui linker_tool = GameObject.FindFirstObjectByType<LinkerToolGui>();
+        foreach (PartLinkTypeAsset link in linker_tool.linkTypes)
+        {
+            if (link.name == name)
+                asset = link;
+        }
+        
         if (!asset) Plugin.Log.LogError($"Missing link type: [{link_type}]!!");
 
         GameObject link_node_object = new GameObject("LinkNode_"+name);

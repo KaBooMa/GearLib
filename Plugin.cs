@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
-using GearLib.Utils;
 using HarmonyLib;
 
 namespace GearLib;
@@ -16,8 +15,6 @@ public class Plugin : BasePlugin
         Log = base.Log;
         Harmony harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
         harmony.PatchAll();
-
-        GearthonLoader.LoadMods();
 
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
     }
