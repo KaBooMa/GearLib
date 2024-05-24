@@ -198,7 +198,7 @@ public class Part
         descriptor.highlightingLayer = highlighting_layer;
         descriptor.intersectionLayerMask = intersection_layer_mask;
 
-        PartDatabaseAssetPatch.QueuePart(part_uid, game_object);
+        PartDatabasePatch.QueuePart(part_uid, game_object);
     }
 
     /// <summary>

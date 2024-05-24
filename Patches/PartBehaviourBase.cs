@@ -5,7 +5,7 @@ using SmashHammer.GearBlocks.Construction;
 namespace GearLib.Patches;
 
 [HarmonyPatch(typeof(PartBehaviourBase), nameof(PartBehaviourBase.Deserialize))]
-class PartBehaviourBase_Patch
+class PartBehaviourBasePatch
 {
     static bool Prefix(PartBehaviourBase __instance, JsonReader __0)
     {

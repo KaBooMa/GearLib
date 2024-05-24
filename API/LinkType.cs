@@ -22,6 +22,6 @@ public class LinkType
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom link type [{name}]");
         this.name = name;
         this.color = color;
-        LinkerToolGuiPatch.QueueLinkType(this);
+        LinkTypeDatabasePatch.Queue(this);
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine;
 namespace GearLib.Patches;
 
 [HarmonyPatch(typeof(LinkerToolGui), nameof(LinkerToolGui.Awake))]
-class LinkerToolGuiPatch : MonoBehaviour
+class LinkTypeDatabasePatch : MonoBehaviour
 {
     private static List<LinkType> new_link_types = new List<LinkType>();
 
@@ -33,7 +33,7 @@ class LinkerToolGuiPatch : MonoBehaviour
 
     }
     
-    public static void QueueLinkType(LinkType link_type)
+    public static void Queue(LinkType link_type)
     {
         new_link_types.Add(link_type);
     }

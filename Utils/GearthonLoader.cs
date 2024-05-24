@@ -36,6 +36,44 @@ class GearthonLoader
 
         return mods;
     }
+    
+    public static void LoadMaterials()
+    {
+        foreach (KeyValuePair<string, JObject> pair in GetMods())
+        {
+            string mod_folder = pair.Key;
+            JObject mod = pair.Value;
+            JArray materials = mod["materials"].Cast<JArray>();
+
+            for (int i = 0; i < materials.Count; i++)
+            {
+                JToken material_data = materials[i].Cast<JToken>();
+                ulong uid = (ulong)material_data["uid"];
+                string name = (string)material_data["name"];
+                string display_name = (string)material_data["display_name"];
+                float density = (float)material_data["density"];
+                Plugin.Log.LogWarning("ASDIQWJDIWQO"+(material_data["strength"] ?? 0f));
+                float strength = (dynamic)material_data["strength"] ?? 0f;
+                bool is_paintable = (bool)material_data["is_paintable"];
+                string file_type = (string)material_data["file_type"];
+                float bounciness = (float)material_data["bounciness"];
+                float dynamic_friction = (float)material_data["dynamic_friction"];
+                float static_friction = (float)material_data["static_friction"];
+                new API.Material(
+                    uid: uid,
+                    path: $"{mod_folder}/textures",
+                    texture_name: $"{uid}.{file_type}",
+                    display_name: display_name,
+                    density: density,
+                    strength: strength,
+                    is_paintable: is_paintable,
+                    bounciness: bounciness,
+                    dynamic_friction: dynamic_friction,
+                    static_friction: static_friction
+                );
+            }
+        }
+    }
 
     public static void LoadLinkTypes()
     {
