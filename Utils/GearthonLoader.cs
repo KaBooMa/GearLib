@@ -52,7 +52,6 @@ class GearthonLoader
             {
                 JToken material_data = materials[i].Cast<JToken>();
                 ulong uid = (ulong)material_data["uid"];
-                string name = (string)material_data["name"];
                 string display_name = (string)material_data["display_name"];
                 float density = (float)material_data["density"];
                 float strength = (dynamic)material_data["strength"] ?? 0f;
@@ -93,9 +92,8 @@ class GearthonLoader
             {
                 JToken link_type_data = link_types[i].Cast<JToken>();
                 string name = (string)link_type_data["name"];
-                string display_name = (string)link_type_data["display_name"];
                 JToken color_data = link_type_data["color"].Cast<JToken>();
-                Color color = new Color((float)color_data["r"], (float)color_data["g"], (float)color_data["b"]);
+                Color color = new Color((float)color_data["r"], (float)color_data["g"], (float)color_data["b"], (float)color_data["a"]);
                 new LinkType(name, color);
             }
         }
