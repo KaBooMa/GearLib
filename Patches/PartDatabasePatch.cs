@@ -37,7 +37,7 @@ class PartDatabasePatch : MonoBehaviour
             PartEntry new_entry = new PartEntry(part.Value);
             part.Value.transform.SetParent(null, false);
             DontDestroyOnLoad(part.Value);
-            // GameObject.Destroy(part.Value.GetComponentInChildren<BoxCollider>());
+            Destroy(part.Value.GetComponentInChildren<BoxCollider>());
             __instance.parts.TryAdd(part.Key, new_entry);
         }
     }

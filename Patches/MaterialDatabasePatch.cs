@@ -21,9 +21,7 @@ class MaterialDatabasePatch : UnityEngine.MonoBehaviour
         foreach (KeyValuePair<ulong, PartMaterialAsset> mat in new_materials)
         {
             MaterialEntry mat_entry = new MaterialEntry(mat.Value);
-            Plugin.Log.LogWarning("BEFORE"+__instance.materials.Count);
             __instance.materials.TryAdd(mat.Key, mat_entry);
-            Plugin.Log.LogWarning("AFTER"+__instance.materials.Count);
         }
     }
     

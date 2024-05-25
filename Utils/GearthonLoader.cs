@@ -43,6 +43,9 @@ class GearthonLoader
         {
             string mod_folder = pair.Key;
             JObject mod = pair.Value;
+            if (mod["materials"] == null)
+                continue;
+
             JArray materials = mod["materials"].Cast<JArray>();
 
             for (int i = 0; i < materials.Count; i++)
@@ -52,7 +55,6 @@ class GearthonLoader
                 string name = (string)material_data["name"];
                 string display_name = (string)material_data["display_name"];
                 float density = (float)material_data["density"];
-                Plugin.Log.LogWarning("ASDIQWJDIWQO"+(material_data["strength"] ?? 0f));
                 float strength = (dynamic)material_data["strength"] ?? 0f;
                 bool is_paintable = (bool)material_data["is_paintable"];
                 string file_type = (string)material_data["file_type"];
@@ -81,6 +83,10 @@ class GearthonLoader
         {
             string mod_folder = pair.Key;
             JObject mod = pair.Value;
+
+            if (mod["link_types"] == null)
+                continue;
+
             JArray link_types = mod["link_types"].Cast<JArray>();
 
             for (int i = 0; i < link_types.Count; i++)
@@ -102,6 +108,9 @@ class GearthonLoader
         {
             string mod_folder = pair.Key;
             JObject mod = pair.Value;
+            if (mod["parts"] == null)
+                continue;
+                
             JArray parts = mod["parts"].Cast<JArray>();
 
             for (int i = 0; i < parts.Count; i++)
