@@ -24,8 +24,8 @@ class LinkTypeDatabasePatch : MonoBehaviour
         foreach (LinkType link_type in new_link_types)
         {
             PartLinkTypeAsset asset = Instantiate(__instance.linkTypes[0]);
-            asset.name = link_type.name;
-            asset.displayName = link_type.name;
+            asset.name = link_type.uid;
+            asset.displayName = link_type.display_name;
             asset.colour = link_type.color;
 
             __instance.linkTypes = __instance.linkTypes.AddItem(asset).ToArray();

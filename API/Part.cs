@@ -223,17 +223,17 @@ public class Part
     /// <param name="position">The position in 3D space to place your link point.</param>
     /// <param name="can_send">Determines if you can send data from this link. Default is true</param>
     /// <param name="can_receive">Determines if you can receive data from this link. Default is true</param>
-    public void AddLinkPoint(string name, string link_type, Vector3 position, bool can_send = true, bool can_receive = true)
+    public void AddLinkPoint(string name, string link_type_name, Vector3 position, bool can_send = true, bool can_receive = true)
     {
         PartLinkTypeAsset asset = null;
         LinkerToolGui linker_tool = GameObject.FindFirstObjectByType<LinkerToolGui>();
         foreach (PartLinkTypeAsset link in linker_tool.linkTypes)
         {
-            if (link.name == name)
+            if (link.displayName == link_type_name)
                 asset = link;
         }
         
-        if (!asset) Plugin.Log.LogError($"Missing link type: [{link_type}]!!");
+        if (!asset) Plugin.Log.LogError($"Missing link type: [{link_type_name}]!!");
 
         GameObject link_node_object = new GameObject("LinkNode_"+name);
         link_node_object.transform.parent = game_object.transform;
@@ -241,6 +241,7 @@ public class Part
         link_node_object.layer = 14;
         
         PartLinkNode link_node = link_node_object.AddComponent<PartLinkNode>();
+        link_node.name = name;
         link_node.type = asset;
         link_node.maxNumOutgoingLinks = can_send ? (byte)255 : (byte)0;
         link_node.maxNumIncomingLinks = can_receive ? (byte)255 : (byte)0;

@@ -91,10 +91,11 @@ class GearthonLoader
             for (int i = 0; i < link_types.Count; i++)
             {
                 JToken link_type_data = link_types[i].Cast<JToken>();
-                string name = (string)link_type_data["name"];
+                string uid = (string)link_type_data["uid"];
+                string display_name = (string)link_type_data["display_name"];
                 JToken color_data = link_type_data["color"].Cast<JToken>();
                 Color color = new Color((float)color_data["r"], (float)color_data["g"], (float)color_data["b"], (float)color_data["a"]);
-                new LinkType(name, color);
+                new LinkType(uid, display_name, color);
             }
         }
     }
