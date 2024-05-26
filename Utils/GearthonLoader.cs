@@ -109,7 +109,7 @@ class GearthonLoader
             JObject mod = pair.Value;
             if (mod["parts"] == null)
                 continue;
-                
+
             JArray parts = mod["parts"].Cast<JArray>();
 
             for (int i = 0; i < parts.Count; i++)
@@ -155,31 +155,37 @@ class GearthonLoader
                 // }
 
                 // Look over any attachments and add them on the part
-                JArray attachments = part_data["attachments"].Cast<JArray>();
-                for (int i2 = 0; i2 < attachments.Count; i2++)
+                if (part_data["attachments"] != null)
                 {
-                    JToken attachment_data = attachments[i2].Cast<JToken>();
-                    part.AddAttachmentPoint(
-                        attachment_name: (string)attachment_data["name"],
-                        attachment_flags: JTokenToTypeFlags(attachment_data["attachment_flags"].Cast<JArray>()),
-                        alignment_flags: JTokenToAlignmentFlags(attachment_data["alignment_flags"].Cast<JArray>()),
-                        position: JTokenToVector3(attachment_data["position"]),
-                        orientation: JTokenToVector3(attachment_data["orientation"]),
-                        size: JTokenToVector3Int(attachment_data["size"]),
-                        pivot: (bool)attachment_data["pivot"]
-                    );
+                    JArray attachments = part_data["attachments"].Cast<JArray>();
+                    for (int i2 = 0; i2 < attachments.Count; i2++)
+                    {
+                        JToken attachment_data = attachments[i2].Cast<JToken>();
+                        part.AddAttachmentPoint(
+                            attachment_name: (string)attachment_data["name"],
+                            attachment_flags: JTokenToTypeFlags(attachment_data["attachment_flags"].Cast<JArray>()),
+                            alignment_flags: JTokenToAlignmentFlags(attachment_data["alignment_flags"].Cast<JArray>()),
+                            position: JTokenToVector3(attachment_data["position"]),
+                            orientation: JTokenToVector3(attachment_data["orientation"]),
+                            size: JTokenToVector3Int(attachment_data["size"]),
+                            pivot: (bool)attachment_data["pivot"]
+                        );
+                    }
                 }
 
                 // Look over any links and add them on the part
-                JArray links = part_data["links"].Cast<JArray>();
-                for (int i2 = 0; i2 < links.Count; i2++)
+                if (part_data["links"] != null)
                 {
-                    JToken link_data = links[i2].Cast<JToken>();
-                    part.AddLinkPoint(
-                        name: (string)link_data["name"],
-                        link_type_name: (string)link_data["link_type_name"],
-                        position: JTokenToVector3(link_data["position"])
-                    );
+                    JArray links = part_data["links"].Cast<JArray>();
+                    for (int i2 = 0; i2 < links.Count; i2++)
+                    {
+                        JToken link_data = links[i2].Cast<JToken>();
+                        part.AddLinkPoint(
+                            name: (string)link_data["name"],
+                            link_type_name: (string)link_data["link_type_name"],
+                            position: JTokenToVector3(link_data["position"])
+                        );
+                    }
                 }
             }
         }
