@@ -54,7 +54,7 @@ class GearthonLoader
                 ulong uid = (ulong)material_data["uid"];
                 string display_name = (string)material_data["display_name"];
                 float density = (float)material_data["density"];
-                float strength = (dynamic)material_data["strength"] ?? 0f;
+                float strength = (float)((dynamic)material_data["strength"] ?? 0f);
                 bool is_paintable = (bool)material_data["is_paintable"];
                 string file_type = (string)material_data["file_type"];
                 float bounciness = (float)material_data["bounciness"];
@@ -94,7 +94,7 @@ class GearthonLoader
                 string uid = (string)link_type_data["uid"];
                 string display_name = (string)link_type_data["display_name"];
                 JToken color_data = link_type_data["color"].Cast<JToken>();
-                Color color = new Color((float)color_data["r"], (float)color_data["g"], (float)color_data["b"], (float)color_data["a"]);
+                Color color = new Color((float)color_data["r"]/255, (float)color_data["g"]/255, (float)color_data["b"]/255, (float)color_data["a"]);
                 new LinkType(uid, display_name, color);
             }
         }
@@ -167,6 +167,18 @@ class GearthonLoader
                         orientation: JTokenToVector3(attachment_data["orientation"]),
                         size: JTokenToVector3Int(attachment_data["size"]),
                         pivot: (bool)attachment_data["pivot"]
+                    );
+                }
+
+                // Look over any links and add them on the part
+                JArray links = part_data["links"].Cast<JArray>();
+                for (int i2 = 0; i2 < links.Count; i2++)
+                {
+                    JToken link_data = links[i2].Cast<JToken>();
+                    part.AddLinkPoint(
+                        name: (string)link_data["name"],
+                        link_type_name: (string)link_data["link_type_name"],
+                        position: JTokenToVector3(link_data["position"])
                     );
                 }
             }
