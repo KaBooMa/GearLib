@@ -4,6 +4,7 @@ using System.IO;
 using GearLib;
 using System.Linq;
 using System;
+using System.Globalization;
 
 namespace GearLib.Utils;
 
@@ -84,16 +85,16 @@ public class ObjParser
 
     private static Vector3 ParseVector3(string[] parts)
     {
-        float x = float.Parse(parts[1]);
-        float y = float.Parse(parts[2]);
-        float z = float.Parse(parts[3]);
+        float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
+        float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
+        float z = float.Parse(parts[3], CultureInfo.InvariantCulture);
         return new Vector3(x, y, z);
     }
 
     private static Vector2 ParseVector2(string[] parts)
     {
-        float x = float.Parse(parts[1]);
-        float y = float.Parse(parts[2]);
+        float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
+        float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
         return new Vector2(x, y);
     }
 }
