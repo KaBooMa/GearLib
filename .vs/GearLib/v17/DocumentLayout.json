@@ -1,0 +1,75 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|c:\\users\\jacob\\source\\repos\\jacobbclr\\gearlib\\utils\\objparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|solutionrelative:utils\\objparser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|c:\\users\\jacob\\source\\repos\\jacobbclr\\gearlib\\utils\\gearthonloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|solutionrelative:utils\\gearthonloader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|c:\\users\\jacob\\source\\repos\\jacobbclr\\gearlib\\api\\part.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1D09B02E-4BC7-43AA-AB94-0CD0003BBD41}|GearLib.csproj|solutionrelative:api\\part.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ObjParser.cs",
+              "DocumentMoniker": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\Utils\\ObjParser.cs",
+              "RelativeDocumentMoniker": "Utils\\ObjParser.cs",
+              "ToolTip": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\Utils\\ObjParser.cs",
+              "RelativeToolTip": "Utils\\ObjParser.cs",
+              "ViewState": "AQIAAGkAAAAAAAAAAAAowIcAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T11:20:26.478Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "GearthonLoader.cs",
+              "DocumentMoniker": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\Utils\\GearthonLoader.cs",
+              "RelativeDocumentMoniker": "Utils\\GearthonLoader.cs",
+              "ToolTip": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\Utils\\GearthonLoader.cs",
+              "RelativeToolTip": "Utils\\GearthonLoader.cs",
+              "ViewState": "AQIAAHMAAAAAAAAAAAAAAIQAAABHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T10:05:33.457Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Part.cs",
+              "DocumentMoniker": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\API\\Part.cs",
+              "RelativeDocumentMoniker": "API\\Part.cs",
+              "ToolTip": "C:\\Users\\jacob\\source\\repos\\jacobbclr\\GearLib\\API\\Part.cs",
+              "RelativeToolTip": "API\\Part.cs",
+              "ViewState": "AQIAADAAAAAAAAAAAAAqwEEAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T10:03:18.5Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

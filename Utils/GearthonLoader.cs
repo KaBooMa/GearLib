@@ -129,7 +129,9 @@ class GearthonLoader
                     asset_path: $"{mod_folder}/models",
                     is_paintable: (string)part_data["is_paintable"] == "True",
                     is_swappable_material: (string)part_data["is_swappable_material"] == "True",
-                    mesh_collider: (string)part_data["mesh_collider"] == "True"
+                    mesh_collider: (string)part_data["mesh_collider"] == "True",
+                    custom_collider: (string)part_data["custom_collider"] == "True",
+                    custom_collider_position: (string)part_data["custom_collider"] == "True" ? JTokenToVector3(part_data["custom_collider_position"]) : default(Vector3)
                 );
 
                 if (script != "")
