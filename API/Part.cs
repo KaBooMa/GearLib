@@ -62,7 +62,9 @@ public class Part
         string asset = null, 
         bool is_paintable = false, 
         bool is_swappable_material = false, 
-        bool mesh_collider = false
+        bool mesh_collider = false,
+        bool custom_collider = false,
+        Vector3 custom_collider_position = default(Vector3)
     )
     {
         Plugin.Log.LogInfo($"{GetType().Name}: Adding custom part [{display_name}]");
@@ -181,6 +183,11 @@ public class Part
                 // Disable all behaviours til cloned
                 foreach (MonoBehaviour behaviour in game_object.GetComponentsInChildren<MonoBehaviour>())
                     behaviour.enabled = false;
+            }
+            else if (custom_collider) {
+                BoxCollisionVolume volume = collider.AddComponent<BoxCollisionVolume>();
+                volume.size = new Vector3(0.1f, 0.1f, 0.1f);
+                volume.center = custom_collider_position;
             }
             else
             {

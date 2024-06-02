@@ -1,100 +1,136 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.IO;
-using GearLib;
-using System.Linq;
-using System;
 using System.Globalization;
 
-namespace GearLib.Utils;
-
-public class ObjParser
+namespace GearLib.Utils
 {
-    public static Mesh ParseObj(string[] data)
+    public class ObjParser
     {
-        List<Vector3> vertices = new List<Vector3>();
-        List<Vector3> normals = new List<Vector3>();
-        List<Vector2> uvs = new List<Vector2>();
-        List<string> faces = new List<string>();
-
-
-        foreach (string line in data)
+        public static Mesh ParseObj(string[] data)
         {
-            string[] parts = line.Trim().Split(' ');
+            List<Vector3> vertices = new List<Vector3>();
+            List<Vector3> normals = new List<Vector3>();
+            List<Vector2> uvs = new List<Vector2>();
+            List<int> triangles = new List<int>();
 
-            switch (parts[0])
+            List<Vector3> meshVertices = new List<Vector3>();
+            List<Vector3> meshNormals = new List<Vector3>();
+            List<Vector2> meshUVs = new List<Vector2>();
+
+            Dictionary<string, int> vertexIndexMap = new Dictionary<string, int>();
+
+            foreach (string line in data)
             {
-                case "v": // Vertex position
-                    Vector3 vertex = ParseVector3(parts);
-                    vertices.Add(vertex);
-                    break;
-                case "vn": // Vertex normal
-                    Vector3 normal = ParseVector3(parts);
-                    normals.Add(normal);
-                    break;
-                case "vt": // Texture coordinate (UV)
-                    Vector2 uv = ParseVector2(parts);
-                    uvs.Add(uv);
-                    break;
-                case "f": // Face
-                    for (int i = 1; i < parts.Length; i++)
-                    {
-                        faces.Add(parts[i]);
-                    }
-                    break;
+                string[] parts = line.Trim().Split(' ');
+
+                switch (parts[0])
+                {
+                    case "v":
+                        vertices.Add(ParseVector3(parts));
+                        break;
+                    case "vn":
+                        normals.Add(ParseVector3(parts));
+                        break;
+                    case "vt":
+                        uvs.Add(ParseVector2(parts));
+                        break;
+                    case "f":
+                        ParseFace(parts, vertices, normals, uvs, meshVertices, meshNormals, meshUVs, triangles, vertexIndexMap);
+                        break;
+                }
             }
+
+            Mesh mesh = new Mesh
+            {
+                vertices = meshVertices.ToArray(),
+                triangles = triangles.ToArray()
+            };
+
+            if (meshNormals.Count > 0)
+            {
+                mesh.normals = meshNormals.ToArray();
+            }
+            else
+            {
+                mesh.RecalculateNormals();
+            }
+
+            if (meshUVs.Count > 0)
+            {
+                mesh.uv = meshUVs.ToArray();
+            }
+
+            mesh.RecalculateBounds();
+            return mesh;
         }
 
-        // Rebuilding obj for Unity
-        List<Vector3> unity_vertices = new List<Vector3>();
-        List<Vector3> unity_normals = new List<Vector3>();
-        List<Vector2> unity_uvs = new List<Vector2>();
-        List<int> unity_faces = new List<int>();
-        foreach (string face in faces)
+        private static void ParseFace(string[] parts, List<Vector3> vertices, List<Vector3> normals, List<Vector2> uvs,
+                                      List<Vector3> meshVertices, List<Vector3> meshNormals, List<Vector2> meshUVs,
+                                      List<int> triangles, Dictionary<string, int> vertexIndexMap)
         {
-            string[] face_data = face.Replace("f ", "").Split(' ');
-            foreach (string d in face_data)
+            for (int i = 1; i < parts.Length; i++)
             {
-                string[] ds = face.Split('/');
-                Vector3 unity_vertex = vertices[Convert.ToInt32(ds[0])-1];
-                unity_vertices.Add(unity_vertex);
-
-                Vector3 unity_normal = normals[Convert.ToInt32(ds[2])-1];
-                unity_normals.Add(unity_normal);
-
-                if (ds[1] != "")
+                string key = parts[i];
+                if (!vertexIndexMap.TryGetValue(key, out int index))
                 {
-                    Vector2 unity_uv = uvs[Convert.ToInt32(ds[1])-1];
-                    unity_uvs.Add(unity_uv);
+                    string[] indices = key.Split('/');
+
+                    int vertIndex = ParseIndex(indices[0], vertices.Count);
+                    Vector3 vertex = vertices[vertIndex];
+
+                    Vector3 normal = Vector3.zero;
+                    if (indices.Length > 2 && !string.IsNullOrEmpty(indices[2]))
+                    {
+                        int normIndex = ParseIndex(indices[2], normals.Count);
+                        normal = normals[normIndex];
+                    }
+
+                    Vector2 uv = Vector2.zero;
+                    if (indices.Length > 1 && !string.IsNullOrEmpty(indices[1]))
+                    {
+                        int uvIndex = ParseIndex(indices[1], uvs.Count);
+                        uv = uvs[uvIndex];
+                    }
+
+                    index = meshVertices.Count;
+                    meshVertices.Add(vertex);
+                    if (normals.Count > 0) meshNormals.Add(normal);
+                    if (uvs.Count > 0) meshUVs.Add(uv);
+
+                    vertexIndexMap[key] = index;
                 }
 
-                unity_faces.Add(unity_vertices.Count-1);
+                triangles.Add(index);
             }
         }
 
-        Mesh mesh = new Mesh
+        private static int ParseIndex(string index, int count)
         {
-            vertices = unity_vertices.ToArray(),
-            normals = unity_normals.ToArray(),
-            uv = unity_uvs.ToArray(),
-            triangles = unity_faces.ToArray()
-        };
-        mesh.RecalculateNormals(); // Recalculate normals based on the vertices and triangles
-        return mesh;
-    }
+            int result = int.Parse(index);
+            if (result < 0)
+            {
+                result = count + result;
+            }
+            else
+            {
+                result = result - 1;
+            }
+            return result;
+        }
 
-    private static Vector3 ParseVector3(string[] parts)
-    {
-        float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
-        float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
-        float z = float.Parse(parts[3], CultureInfo.InvariantCulture);
-        return new Vector3(x, y, z);
-    }
+        private static Vector3 ParseVector3(string[] parts)
+        {
+            float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
+            float z = float.Parse(parts[3], CultureInfo.InvariantCulture);
+            return new Vector3(x, y, z);
+        }
 
-    private static Vector2 ParseVector2(string[] parts)
-    {
-        float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
-        float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
-        return new Vector2(x, y);
+        private static Vector2 ParseVector2(string[] parts)
+        {
+            float x = float.Parse(parts[1], CultureInfo.InvariantCulture);
+            float y = float.Parse(parts[2], CultureInfo.InvariantCulture);
+            return new Vector2(x, y);
+        }
     }
 }
